@@ -1,0 +1,45 @@
+<scroll-view class="page" scroll-y>
+  <view class="calculator">
+    <view class="title">日代百货成本计算器</view>
+
+    <view class="form">
+      <view class="form-row">
+        <text class="label">含税原价（日元）</text>
+        <input class="input" type="digit" value="{{form.taxIncludedPrice}}" data-field="taxIncludedPrice" bindinput="onInputChange" />
+      </view>
+      <view class="form-row">
+        <text class="label">折扣（无折扣填1）</text>
+        <input class="input" type="digit" value="{{form.discount}}" data-field="discount" bindinput="onInputChange" />
+      </view>
+      <view class="form-row">
+        <text class="label">刷卡汇率</text>
+        <input class="input" type="digit" value="{{form.cardRate}}" data-field="cardRate" bindinput="onInputChange" />
+      </view>
+      <view class="form-row">
+        <text class="label">退税汇率</text>
+        <input class="input" type="digit" value="{{form.rebateTaxRate}}" data-field="rebateTaxRate" bindinput="onInputChange" />
+      </view>
+      <view class="form-row">
+        <text class="label">返点点数（2个点填0.02）</text>
+        <input class="input" type="digit" value="{{form.rebatePoints}}" data-field="rebatePoints" bindinput="onInputChange" />
+      </view>
+    </view>
+
+    <button class="calculate-button" bindtap="calculate">计算到手成本</button>
+
+    <view wx:if="{{result}}" class="result">
+      <view class="result-row"><text>到手税费</text><text>{{result.tax}} 元</text></view>
+      <view class="result-row"><text>刷卡成本</text><text>{{result.cardCost}} 元</text></view>
+      <view class="result-row"><text>返点</text><text>{{result.rebate}} 元</text></view>
+      <view class="final-row"><text>最终成本</text><text>{{result.finalCost}} 元</text></view>
+    </view>
+
+    <view class="formula">
+      <text class="formula-title">公式：</text>
+      <text>到手税费(人民币) = 含税价/1.1 × 折扣 × 0.1 × 0.77 × 退税汇率</text>
+      <text>刷卡成本(人民币) = 含税价 × 折扣 × 刷卡汇率</text>
+      <text>返点(人民币) = 含税价/1.1 × 折扣 × 返点点数 × 刷卡汇率</text>
+      <text>最终成本 = 刷卡成本 - 到手税费 - 返点</text>
+    </view>
+  </view>
+</scroll-view>
