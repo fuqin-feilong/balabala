@@ -9,6 +9,52 @@ page {
   padding: 16rpx;
 }
 
+.announcement {
+  display: flex;
+  align-items: center;
+  height: 72rpx;
+  margin-bottom: 16rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  border-radius: 16rpx;
+  background: #fff5f6;
+  color: #ce0d31;
+}
+
+.announcement-label {
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.ticker-window {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 14s linear infinite;
+}
+
+.ticker-text {
+  flex-shrink: 0;
+  margin-right: 96rpx;
+  font-size: 25rpx;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .calculator {
   min-height: calc(100vh - 32rpx);
   box-sizing: border-box;
@@ -37,6 +83,32 @@ page {
   color: #14284b;
   font-size: 30rpx;
   line-height: 1.4;
+}
+
+.label-with-help {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+}
+
+.label-with-help .label {
+  flex: 0 1 auto;
+}
+
+.help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34rpx;
+  height: 34rpx;
+  margin-left: 10rpx;
+  border: 1rpx solid #647083;
+  border-radius: 50%;
+  color: #647083;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-align: center;
 }
 
 .input {

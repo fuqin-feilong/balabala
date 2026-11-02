@@ -1,6 +1,16 @@
 <scroll-view class="page" scroll-y>
+  <view class="announcement">
+    <text class="announcement-label">公告</text>
+    <view class="ticker-window">
+      <view class="ticker-track">
+        <text class="ticker-text">{{announcement}}</text>
+        <text class="ticker-text">{{announcement}}</text>
+      </view>
+    </view>
+  </view>
+
   <view class="calculator">
-    <view class="title">日代百货成本计算器</view>
+    <view class="title">日本购物百货成本计算器</view>
 
     <view class="form">
       <view class="form-row">
@@ -23,6 +33,13 @@
         <text class="label">返点点数（2个点填0.02）</text>
         <input class="input" type="digit" value="{{form.rebatePoints}}" data-field="rebatePoints" bindinput="onInputChange" />
       </view>
+      <view class="form-row">
+        <view class="label-with-help">
+          <text class="label">退税手续费（人民币）</text>
+          <text class="help-button" bindtap="showTaxFeeHelp">?</text>
+        </view>
+        <input class="input" type="digit" value="{{form.taxFee}}" data-field="taxFee" bindinput="onInputChange" />
+      </view>
     </view>
 
     <button class="calculate-button" bindtap="calculate">计算到手成本</button>
@@ -31,6 +48,7 @@
       <view class="result-row"><text>到手税费</text><text>{{result.tax}} 元</text></view>
       <view class="result-row"><text>刷卡成本</text><text>{{result.cardCost}} 元</text></view>
       <view class="result-row"><text>返点</text><text>{{result.rebate}} 元</text></view>
+      <view class="result-row"><text>退税手续费</text><text>{{result.taxFee}} 元</text></view>
       <view class="final-row"><text>最终成本</text><text>{{result.finalCost}} 元</text></view>
     </view>
 
@@ -39,7 +57,7 @@
       <text>到手税费(人民币) = 含税价/1.1 × 折扣 × 0.1 × 0.77 × 退税汇率</text>
       <text>刷卡成本(人民币) = 含税价 × 折扣 × 刷卡汇率</text>
       <text>返点(人民币) = 含税价/1.1 × 折扣 × 返点点数 × 刷卡汇率</text>
-      <text>最终成本 = 刷卡成本 - 到手税费 - 返点</text>
+      <text>最终成本 = 刷卡成本 - 到手税费 - 返点 + 退税手续费</text>
     </view>
   </view>
 </scroll-view>
