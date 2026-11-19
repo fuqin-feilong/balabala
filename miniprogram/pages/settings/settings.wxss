@@ -511,3 +511,373 @@
   color: #ffffff;
   box-shadow: 0 8rpx 18rpx rgba(79, 124, 116, 0.2);
 }
+
+/* ===== Default settings form ===== */
+.page-bottom-space {
+  height: 30rpx;
+}
+
+.card-default::before {
+  background: linear-gradient(90deg, #5f8f84, #a8c4bb);
+}
+
+.card-tax::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.card-refund-settings::before {
+  background: linear-gradient(90deg, #5f8f84, #a8c4bb);
+}
+
+.card-money::before {
+  background: linear-gradient(90deg, #b59a7a, #d8c8b4);
+}
+
+.card-quote::before {
+  background: linear-gradient(90deg, #8a7aa8, #c3b8d4);
+}
+
+.row-between {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.field-label {
+  color: #3f4a50;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.inline-hint {
+  color: #8a959d;
+  font-size: 20rpx;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.setting-block {
+  margin-top: 26rpx;
+}
+
+.segment {
+  display: flex;
+  margin-top: 14rpx;
+  padding: 6rpx;
+  border-radius: 18rpx;
+  background: #f0f3f4;
+}
+
+.segment.small {
+  width: 300rpx;
+  flex-shrink: 0;
+  margin-top: 12rpx;
+}
+
+.segment.three .segment-item {
+  flex: 1;
+}
+
+.segment-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 62rpx;
+  border-radius: 14rpx;
+  color: #6b7780;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.segment-item.active {
+  background: #ffffff;
+  color: #3f6b62;
+  box-shadow: 0 4rpx 12rpx rgba(31, 45, 55, 0.08);
+}
+
+.two-options {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 14rpx;
+}
+
+.option-card {
+  flex: 1;
+  min-width: 0;
+  padding: 18rpx;
+  border: 1rpx solid #dde5e7;
+  border-radius: 18rpx;
+  background: #f8fafb;
+}
+
+.option-card.active {
+  border-color: #4f7c74;
+  background: #f0f6f4;
+  box-shadow: inset 0 0 0 1rpx rgba(79, 124, 116, 0.2);
+}
+
+.option-title {
+  color: #3f4a50;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.option-card.active .option-title {
+  color: #3f6b62;
+}
+
+.option-sub {
+  margin-top: 6rpx;
+  color: #8a959d;
+  font-size: 19rpx;
+  line-height: 1.4;
+}
+
+.picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  min-height: 96rpx;
+  border-bottom: 1rpx solid #e8edef;
+}
+
+.picker-row.no-border {
+  border-bottom: 0;
+}
+
+.picker-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.picker-value {
+  flex-shrink: 0;
+  max-width: 300rpx;
+  padding: 10rpx 18rpx;
+  border: 1rpx solid #d5e3de;
+  border-radius: 999rpx;
+  background: #eff5f3;
+  color: #4f6b64;
+  font-size: 21rpx;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  min-height: 92rpx;
+  border-bottom: 1rpx solid #e8edef;
+}
+
+.input-row:last-child {
+  border-bottom: 0;
+}
+
+.inline-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex-shrink: 0;
+  min-width: 150rpx;
+  height: 64rpx;
+  padding: 0 16rpx;
+  border: 1rpx solid #dde5e7;
+  border-radius: 14rpx;
+  background: #f8fafb;
+}
+
+.inline-input {
+  flex: 1;
+  min-width: 0;
+  height: 56rpx;
+  color: #1f2a30;
+  font-size: 26rpx;
+  font-weight: 600;
+  text-align: right;
+}
+
+.inline-unit {
+  color: #8a959d;
+  font-size: 20rpx;
+}
+
+.inline-text-input {
+  flex-shrink: 0;
+  width: 280rpx;
+  height: 64rpx;
+  padding: 0 16rpx;
+  border: 1rpx solid #dde5e7;
+  border-radius: 14rpx;
+  background: #f8fafb;
+  color: #1f2a30;
+  font-size: 22rpx;
+  text-align: right;
+}
+
+.custom-fee {
+  margin-top: 10rpx;
+  padding: 6rpx 18rpx 14rpx;
+  border: 1rpx dashed #d5dedf;
+  border-radius: 18rpx;
+  background: #fbfcfc;
+}
+
+.inline-note {
+  margin-top: 10rpx;
+  color: #8a959d;
+  font-size: 20rpx;
+  line-height: 1.5;
+}
+
+.highlight-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  margin-top: 20rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  line-height: 1.5;
+}
+
+.highlight-teal {
+  border: 1rpx solid #d7e6e1;
+  background: #f1f7f5;
+}
+
+.highlight-tag {
+  flex-shrink: 0;
+  padding: 2rpx 12rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #4f7c74;
+  font-size: 19rpx;
+  font-weight: 700;
+}
+
+.highlight-text {
+  color: #5c686f;
+  font-size: 21rpx;
+  line-height: 1.55;
+}
+
+.rate-block {
+  padding: 20rpx 0 8rpx;
+  border-bottom: 1rpx solid #e8edef;
+}
+
+.sync-btn {
+  flex-shrink: 0;
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  font-size: 21rpx;
+  font-weight: 600;
+  box-shadow: 0 6rpx 14rpx rgba(79, 124, 116, 0.18);
+}
+
+.rate-input-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.rate-input {
+  flex: 1;
+  min-width: 0;
+  height: 84rpx;
+  color: #1f2a30;
+  font-size: 46rpx;
+  font-weight: 800;
+  line-height: 84rpx;
+}
+
+.rate-unit {
+  flex-shrink: 0;
+  color: #8a959d;
+  font-size: 20rpx;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92rpx;
+  height: 60rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid #dde5e7;
+  border-radius: 999rpx;
+  background: #f7f9fa;
+  color: #5c686f;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.chip.active {
+  border-color: #4f7c74;
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 6rpx 14rpx rgba(79, 124, 116, 0.18);
+}
+
+.save-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin: 6rpx 0 24rpx;
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 84rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.save-btn.primary {
+  flex: 1 1 100%;
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 8rpx 18rpx rgba(79, 124, 116, 0.2);
+}
+
+.save-btn.secondary {
+  flex: 1;
+  border: 1rpx solid #d5e3de;
+  background: #eff5f3;
+  color: #4f6b64;
+}
+
+.save-btn.ghost {
+  flex: 1;
+  border: 1rpx solid #e8d2ca;
+  background: #f7edea;
+  color: #8a5a48;
+}
+
+.save-note {
+  margin: -10rpx 8rpx 24rpx;
+  color: #8a959d;
+  font-size: 20rpx;
+  line-height: 1.55;
+  text-align: center;
+}

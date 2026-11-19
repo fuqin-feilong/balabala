@@ -74,7 +74,7 @@ export const REFUND_COMPANIES: RefundCompany[] = [
     verifiedAt: '2026-11-19',
     sourceNote: `用户截图 2026-11；${SHARED_DISCLAIMER}`,
     description:
-      '网页登记，免 App，退信用卡。大店多为 0%：多庆屋、BicCamera、唐吉诃德、札幌/鹤羽药妆；松本清 0.33%、GU 与东武 1%、二木高尔夫 1.5%、伊...（截图原文截断）',
+      '网页登记，免 App，退信用卡。大店多为 0%：多庆屋、BicCamera、唐吉诃德、札幌/鹤羽药妆；松本清 0.33%、GU 与东武 1%、二木高尔夫 1.5%、伊...',
     fees: [{ label: '服务费', pct: 1, basis: 'preTax' }],
     storePresets: [
       { id: 'default', name: '公司默认 1%', feePct: 1, feeBasis: 'preTax' },
@@ -157,7 +157,7 @@ export const REFUND_COMPANIES: RefundCompany[] = [
     verifiedAt: '2026-11-19',
     sourceNote: `用户截图 2026-11；${SHARED_DISCLAIMER}`,
     description:
-      '网页登记，免 App。多为定额或按店：3COINS 定额 320 円、思梦乐 1–2.5%、MURASAKI SPORTS 2–3%、阿卡将含税 1.1%；AEON、PARCO...（截图原文截断）',
+      '网页登记，免 App。多为定额或按店：3COINS 定额 320 円、思梦乐 1–2.5%、MURASAKI SPORTS 2–3%、阿卡将含税 1.1%；AEON、PARCO...',
     fees: [{ label: '服务费', pct: 1.55, basis: 'preTax' }],
     storePresets: [
       { id: 'default', name: '公司默认 1.55%', feePct: 1.55, feeBasis: 'preTax' },

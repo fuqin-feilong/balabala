@@ -44,10 +44,13 @@ import {
   isRestorePending,
   loadForm,
   saveForm,
+  saveQuoteSeed,
 } from '../../utils/storage'
 import { addOrder } from '../../services/orders'
 import type { OrderResultSnapshot } from '../../services/orders'
-import { fetchMarketRate } from '../../services/exchangeRate'
+import { fetchMarketRate, getCachedRate } from '../../services/exchangeRate'
+import { loadDefaults, paramFieldsFromDefaults } from '../../utils/defaults'
+import type { DefaultSettings } from '../../utils/defaults'
 
 interface FormState {
   price: string
@@ -101,6 +104,7 @@ interface FeeLineView {
 
 interface ResultView {
   netCostText: string
+  netCostValue: number
   perUnitText: string
   showPerUnit: boolean
   paidText: string
@@ -180,6 +184,47 @@ function normalizeForm(raw: FormState): FormState {
   return form
 }
 
+function applyCachedRate(form: FormState): FormState {
+  const cached = getCachedRate()
+  if (!cached) {
+    return form
+  }
+  // 冷启动只接受 12 小时内的缓存，避免把过期汇率当成默认值
+  if (cached.updatedAt && Date.now() - cached.updatedAt > 12 * 60 * 60 * 1000) {
+    return form
+  }
+  const rate = cached.ratePer100.toFixed(8)
+  form.ratePer100 = rate
+  form.marketRatePer100 = rate
+  form.cardRatePer100 = rate
+  form.rateSource = 'cache'
+  form.rateUpdatedAt = cached.updatedAt
+  return form
+}
+
+/** 冷启动：套用用户默认参数，但保留上次价格和数量 */
+function buildLaunchForm(defaults: DefaultSettings): FormState {
+  const saved = loadForm(DEFAULT_FORM)
+  const merged = {
+    ...saved,
+    ...paramFieldsFromDefaults(defaults),
+    actualRefundJPY: '',
+    actualReceivedCNY: '',
+    receiptRate: '',
+    useActual: false,
+  } as FormState
+  return applyCachedRate(normalizeForm(merged))
+}
+
+/** 恢复默认：清空价格和数量，参数回到用户默认设置 */
+function buildResetForm(defaults: DefaultSettings): FormState {
+  const merged = {
+    ...DEFAULT_FORM,
+    ...paramFieldsFromDefaults(defaults),
+  } as FormState
+  return applyCachedRate(normalizeForm(merged))
+}
+
 function mainFeeOfCompany(company: RefundCompany) {
   return company.fees[0] || { label: '手续费', pct: 0, basis: 'preTax' as FeeBasis }
 }
@@ -222,7 +267,7 @@ Page({
     isManualCompany: false,
     canResetFee: false,
     hasOptionalFee: false,
-    refundOpen: true,
+    refundOpen: false,
     reconcileOpen: false,
     feeAdvancedOpen: false,
     hasResult: false,
@@ -238,7 +283,7 @@ Page({
   },
 
   onLoad() {
-    const form = normalizeForm(loadForm(DEFAULT_FORM))
+    const form = buildLaunchForm(loadDefaults())
     this.setData(
       {
         form,
@@ -254,7 +299,7 @@ Page({
 
   onShow() {
     if (consumeReset()) {
-      this.setData({ form: DEFAULT_FORM }, () => {
+      this.setData({ form: buildResetForm(loadDefaults()) }, () => {
         this.recalculate()
         wx.showToast({ title: '已恢复默认', icon: 'none' })
       })
@@ -462,6 +507,7 @@ Page({
       form.settlementMode === 'refund' ? '出境退税' : '不退税一口价'
     return {
       netCostText: formatCNY(calculated.netCostCNY),
+      netCostValue: calculated.netCostCNY,
       perUnitText: formatCNY(calculated.perUnitCNY),
       showPerUnit: calculated.quantity > 1,
       paidText: formatCNY(calculated.paidCNY),
@@ -901,11 +947,21 @@ Page({
     wx.setClipboardData({ data: lines.join('\n') })
   },
 
+  onGoQuote() {
+    const result = this.data.result
+    if (!result || !Number.isFinite(result.netCostValue) || result.netCostValue <= 0) {
+      wx.showToast({ title: '先输入商品价格', icon: 'none' })
+      return
+    }
+    saveQuoteSeed(result.netCostValue)
+    wx.switchTab({ url: '/pages/quote/quote' })
+  },
+
   openHistory() {
-    wx.navigateTo({ url: '/pages/history/history' })
+    wx.switchTab({ url: '/pages/history/history' })
   },
 
   openSettings() {
-    wx.navigateTo({ url: '/pages/settings/settings' })
+    wx.switchTab({ url: '/pages/settings/settings' })
   },
 })

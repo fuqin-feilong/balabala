@@ -2674,3 +2674,11 @@
   font-size: 18rpx;
   letter-spacing: 0.5rpx;
 }
+
+/* Quote shortcut */
+.action-btn.quote {
+  border: 1rpx solid rgba(199, 221, 215, 0.4);
+  background: rgba(95, 143, 132, 0.22);
+  color: #eaf4f1;
+  font-size: 25rpx;
+}

@@ -2,6 +2,9 @@ export const FORM_KEY = 'daigou_calc_form_v2'
 export const RESTORE_KEY = 'daigou_calc_restore_v2'
 export const RESET_KEY = 'daigou_calc_reset_v2'
 export const ORDERS_KEY = 'daigou_calc_orders_v2'
+export const DEFAULTS_KEY = 'daigou_defaults_v1'
+export const QUOTE_FORM_KEY = 'daigou_quote_form_v1'
+export const QUOTE_SEED_KEY = 'daigou_quote_seed_v1'
 
 export function loadForm<T extends object>(fallback: T): T {
   try {
@@ -103,5 +106,55 @@ export function clearSavedForm(): void {
     wx.removeStorageSync(RESTORE_KEY)
   } catch (error) {
     // ignore
+  }
+}
+
+export function loadQuoteForm<T extends object>(fallback: T): T {
+  try {
+    const saved = wx.getStorageSync(QUOTE_FORM_KEY)
+    if (!saved || typeof saved !== 'object') {
+      return fallback
+    }
+    return { ...(fallback as object), ...(saved as object) } as T
+  } catch (error) {
+    return fallback
+  }
+}
+
+export function saveQuoteForm(form: Record<string, unknown>): void {
+  try {
+    wx.setStorageSync(QUOTE_FORM_KEY, form)
+  } catch (error) {
+    // ignore
+  }
+}
+
+export interface QuoteSeed {
+  costCNY: number
+  createdAt: number
+}
+
+export function saveQuoteSeed(costCNY: number): void {
+  try {
+    const seed: QuoteSeed = { costCNY, createdAt: Date.now() }
+    wx.setStorageSync(QUOTE_SEED_KEY, seed)
+  } catch (error) {
+    // ignore
+  }
+}
+
+export function consumeQuoteSeed(): QuoteSeed | null {
+  try {
+    const seed = wx.getStorageSync(QUOTE_SEED_KEY) as QuoteSeed | ''
+    if (!seed || typeof seed !== 'object') {
+      return null
+    }
+    wx.removeStorageSync(QUOTE_SEED_KEY)
+    if (!Number.isFinite(seed.costCNY) || seed.costCNY <= 0) {
+      return null
+    }
+    return seed
+  } catch (error) {
+    return null
   }
 }

@@ -1,9 +1,398 @@
 <view class="page">
   <view class="hero">
-    <view class="hero-kicker">SETTINGS</view>
-    <view class="hero-title">设置</view>
-    <view class="hero-sub">参数版本 {{dataVersion}} · 本地存储，不需要登录</view>
+    <view class="hero-kicker">DEFAULT SETTINGS</view>
+    <view class="hero-title">默认设置</view>
+    <view class="hero-sub">打开计算器时用这里的默认值，进入后仍可随时调整</view>
   </view>
+
+  <view class="card card-default card-tax">
+    <view class="section-head">
+      <view>
+        <view class="card-title">默认消费税与结算</view>
+        <view class="card-sub">冷启动时自动套用，保留上次价格和数量</view>
+      </view>
+      <view class="help-link" bindtap="onParamHelp">说明</view>
+    </view>
+
+    <view class="setting-block">
+      <view class="row-between">
+        <view class="field-label">默认消费税率</view>
+        <view class="inline-hint">食品饮料适用 8%</view>
+      </view>
+      <view class="segment small">
+        <view
+          wx:for="{{taxRates}}"
+          wx:key="value"
+          class="segment-item {{defaults.taxRatePct === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onTaxRateTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="setting-block">
+      <view class="row-between">
+        <view class="field-label">默认价格口径</view>
+        <view class="inline-hint">商品价格按哪种方式输入</view>
+      </view>
+      <view class="segment small">
+        <view
+          class="segment-item {{defaults.priceMode === 'included' ? 'active' : ''}}"
+          data-value="included"
+          bindtap="onPriceModeTap"
+        >含税价</view>
+        <view
+          class="segment-item {{defaults.priceMode === 'excluded' ? 'active' : ''}}"
+          data-value="excluded"
+          bindtap="onPriceModeTap"
+        >不含税价</view>
+      </view>
+    </view>
+
+    <view class="setting-block">
+      <view class="field-label">默认结算方式</view>
+      <view class="two-options">
+        <view
+          class="option-card {{defaults.settlementMode === 'refund' ? 'active' : ''}}"
+          data-value="refund"
+          bindtap="onSettlementTap"
+        >
+          <view class="option-title">出境退税</view>
+          <view class="option-sub">先付含税价，离境退消费税</view>
+        </view>
+        <view
+          class="option-card {{defaults.settlementMode === 'taxFree' ? 'active' : ''}}"
+          data-value="taxFree"
+          bindtap="onSettlementTap"
+        >
+          <view class="option-title">不退税一口价</view>
+          <view class="option-sub">按免税价直接付款</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card card-default card-refund-settings">
+    <view class="card-title">默认退税参数</view>
+    <view class="card-sub">手续费默认跟随退税公司，也可以固定成你常用的值</view>
+
+    <view class="picker-row">
+      <view class="picker-info">
+        <view class="row-title">退税公司</view>
+        <view class="row-sub">{{companyDefaultFeeText}}</view>
+      </view>
+      <picker
+        mode="selector"
+        range="{{companies}}"
+        range-key="name"
+        value="{{companyIndex}}"
+        bindchange="onCompanyChange"
+      >
+        <view class="picker-value">{{companyName}} ›</view>
+      </picker>
+    </view>
+
+    <view class="picker-row">
+      <view class="picker-info">
+        <view class="row-title">机场现金</view>
+        <view class="row-sub">可选，与平台手续费叠加</view>
+      </view>
+      <picker
+        mode="selector"
+        range="{{addons}}"
+        range-key="name"
+        value="{{addonIndex}}"
+        bindchange="onAddonChange"
+      >
+        <view class="picker-value">{{addonName}} ›</view>
+      </picker>
+    </view>
+
+    <view class="setting-block">
+      <view class="field-label">退税手续费</view>
+      <view class="segment">
+        <view
+          class="segment-item {{!defaults.feeCustom ? 'active' : ''}}"
+          data-value="company"
+          bindtap="onFeeModeTap"
+        >跟随公司默认</view>
+        <view
+          class="segment-item {{defaults.feeCustom ? 'active' : ''}}"
+          data-value="custom"
+          bindtap="onFeeModeTap"
+        >固定自定义</view>
+      </view>
+      <view class="inline-note">{{companyDefaultFeeText}}</view>
+    </view>
+
+    <view wx:if="{{defaults.feeCustom}}" class="custom-fee">
+      <view class="input-row">
+        <view class="row-title">手续费比例</view>
+        <view class="inline-input-wrap">
+          <input
+            class="inline-input"
+            type="digit"
+            value="{{defaults.feePct}}"
+            bindinput="onFeePctInput"
+          />
+          <text class="inline-unit">%</text>
+        </view>
+      </view>
+
+      <view class="picker-row no-border">
+        <view class="picker-info">
+          <view class="row-title">计费口径</view>
+          <view class="row-sub">按未税价 / 含税价 / 退税额等</view>
+        </view>
+        <picker
+          mode="selector"
+          range="{{feeBasisOptions}}"
+          range-key="label"
+          value="{{feeBasisIndex}}"
+          bindchange="onFeeBasisChange"
+        >
+          <view class="picker-value">{{feeBasisLabel}} ›</view>
+        </picker>
+      </view>
+
+      <view class="row">
+        <view>
+          <view class="row-title">改为定额手续费</view>
+          <view class="row-sub">例如固定 320 円</view>
+        </view>
+        <switch
+          checked="{{defaults.feeIsFixed}}"
+          color="#5f8f84"
+          bindchange="onFeeFixedChange"
+        />
+      </view>
+
+      <view wx:if="{{defaults.feeIsFixed}}" class="input-row">
+        <view class="row-title">定额金额</view>
+        <view class="inline-input-wrap">
+          <input
+            class="inline-input"
+            type="digit"
+            value="{{defaults.feeFixedJPY}}"
+            bindinput="onFeeFixedInput"
+          />
+          <text class="inline-unit">円</text>
+        </view>
+      </view>
+
+      <view class="input-row">
+        <view class="row-title">最低手续费</view>
+        <view class="inline-input-wrap">
+          <input
+            class="inline-input"
+            type="digit"
+            value="{{defaults.feeMinJPY}}"
+            placeholder="0"
+            bindinput="onFeeMinInput"
+          />
+          <text class="inline-unit">円</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="row">
+      <view>
+        <view class="row-title">包含可选提现费</view>
+        <view class="row-sub">例如 PIE VAT 的 0.28%</view>
+      </view>
+      <switch
+        checked="{{defaults.includeOptionalFees}}"
+        color="#5f8f84"
+        bindchange="onOptionalFeeChange"
+      />
+    </view>
+
+    <view class="highlight-box highlight-teal">
+      <text class="highlight-tag">提示</text>
+      <text class="highlight-text">费率跟店走，这里的默认值只作为打开计算器时的初始值；在计算器里仍可按门店小票修改。</text>
+    </view>
+  </view>
+
+  <view class="card card-default card-money">
+    <view class="card-title">折扣、返现与汇率</view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">默认折扣</view>
+        <view class="row-sub">优惠券 / 会员折扣，5% = 打 95 折</view>
+      </view>
+      <view class="inline-input-wrap">
+        <input class="inline-input" type="digit" value="{{defaults.discountPct}}" bindinput="onDiscountInput" />
+        <text class="inline-unit">%</text>
+      </view>
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">默认返现</view>
+        <view class="row-sub">信用卡 / 平台返现</view>
+      </view>
+      <view class="inline-input-wrap">
+        <input class="inline-input" type="digit" value="{{defaults.cashbackPct}}" bindinput="onCashbackInput" />
+        <text class="inline-unit">%</text>
+      </view>
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">其他固定手续费</view>
+        <view class="row-sub">人民币；没有就填 0</view>
+      </view>
+      <view class="inline-input-wrap">
+        <input class="inline-input" type="digit" value="{{defaults.extraFeeCNY}}" bindinput="onExtraFeeInput" />
+        <text class="inline-unit">元</text>
+      </view>
+    </view>
+
+    <view class="rate-block">
+      <view class="row-between">
+        <view>
+          <view class="row-title">默认汇率</view>
+          <view class="row-sub">100 日元 ≈ ? 元；没有实时汇率时使用</view>
+        </view>
+        <view class="sync-btn" bindtap="onSyncRate">同步实时</view>
+      </view>
+      <view class="rate-input-row">
+        <input class="rate-input" type="digit" value="{{defaults.ratePer100}}" bindinput="onRateInput" />
+        <text class="rate-unit">元 / 100 日元</text>
+      </view>
+      <view class="inline-note">{{cacheRateText}}</view>
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">默认汇损</view>
+        <view class="row-sub">到账核对时用于估算</view>
+      </view>
+      <view class="inline-input-wrap">
+        <input class="inline-input" type="digit" value="{{defaults.fxLossPct}}" bindinput="onFxLossInput" />
+        <text class="inline-unit">%</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card card-default card-quote">
+    <view class="card-title">默认报价参数</view>
+    <view class="card-sub">报价页打开时自动带出这些偏好</view>
+
+    <view class="setting-block">
+      <view class="field-label">加价方式</view>
+      <view class="segment three">
+        <view
+          class="segment-item {{defaults.quoteMode === 'pct' ? 'active' : ''}}"
+          data-value="pct"
+          bindtap="onQuoteModeTap"
+        >按利润率</view>
+        <view
+          class="segment-item {{defaults.quoteMode === 'fixed' ? 'active' : ''}}"
+          data-value="fixed"
+          bindtap="onQuoteModeTap"
+        >加固定金额</view>
+        <view
+          class="segment-item {{defaults.quoteMode === 'both' ? 'active' : ''}}"
+          data-value="both"
+          bindtap="onQuoteModeTap"
+        >两种都列</view>
+      </view>
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">利润率选项</view>
+        <view class="row-sub">用 / 或逗号分隔</view>
+      </view>
+      <input
+        class="inline-text-input"
+        value="{{quoteProfitText}}"
+        placeholder="10 / 20 / 50 / 100"
+        bindinput="onQuoteProfitInput"
+      />
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">固定加价选项</view>
+        <view class="row-sub">用 / 或逗号分隔</view>
+      </view>
+      <input
+        class="inline-text-input"
+        value="{{quoteFixedText}}"
+        placeholder="30 / 50 / 100 / 200"
+        bindinput="onQuoteFixedInput"
+      />
+    </view>
+
+    <view class="setting-block">
+      <view class="field-label">利润口径</view>
+      <view class="two-options">
+        <view
+          class="option-card {{defaults.quoteBasis === 'costPlus' ? 'active' : ''}}"
+          data-value="costPlus"
+          bindtap="onQuoteBasisTap"
+        >
+          <view class="option-title">成本加成</view>
+          <view class="option-sub">成本 ×（1 + 利润率）</view>
+        </view>
+        <view
+          class="option-card {{defaults.quoteBasis === 'margin' ? 'active' : ''}}"
+          data-value="margin"
+          bindtap="onQuoteBasisTap"
+        >
+          <view class="option-title">毛利口径</view>
+          <view class="option-sub">成本 ÷（1 − 利润率）</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="input-row">
+      <view>
+        <view class="row-title">利润率底线</view>
+        <view class="row-sub">低于该值的利润率报价会隐藏</view>
+      </view>
+      <view class="inline-input-wrap">
+        <input class="inline-input" type="digit" value="{{defaults.quoteFloorPct}}" bindinput="onQuoteFloorInput" />
+        <text class="inline-unit">%</text>
+      </view>
+    </view>
+
+    <view class="setting-block">
+      <view class="field-label">报价取整</view>
+      <view class="chips">
+        <view
+          wx:for="{{roundingOptions}}"
+          wx:key="value"
+          class="chip {{defaults.quoteRounding === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onQuoteRoundingTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="setting-block">
+      <view class="field-label">报价有效期</view>
+      <view class="chips">
+        <view
+          wx:for="{{validityOptions}}"
+          wx:key="value"
+          class="chip {{defaults.quoteValidity === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onQuoteValidityTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="save-actions">
+    <view class="save-btn primary" bindtap="onSaveDefaults">保存默认设置</view>
+    <view class="save-btn secondary" bindtap="onImportFromCalculator">用计算器当前参数</view>
+    <view class="save-btn ghost" bindtap="onResetDefaults">恢复系统默认</view>
+  </view>
+  <view class="save-note">保存后，下次冷启动小程序时套用；在计算器里仍可随时临时调整。</view>
 
   <view class="card card-data">
     <view class="card-title">数据</view>
@@ -28,7 +417,7 @@
     <view class="row">
       <view>
         <view class="row-title">恢复默认表单</view>
-        <view class="row-sub">清除当前输入和自定义费率</view>
+        <view class="row-sub">清除当前输入，参数回到你保存的默认值</view>
       </view>
       <view class="row-action" bindtap="onResetForm">恢复</view>
     </view>
@@ -75,9 +464,8 @@
     <view class="disclaimer-title">免责声明</view>
     <view class="disclaimer-text">本工具只做估算，不构成退税/汇率承诺。实际退税额、手续费和汇率以门店、退税公司、银行/支付渠道的最终结果为准。</view>
     <view class="disclaimer-text">2026.11.1 起日本免税改为「先付后退」：同店同日未税满 5,000 円，离境海关确认后退税。</view>
+    <view class="disclaimer-text">参数版本 {{dataVersion}} · 默认设置只保存在本机，不需要登录。</view>
   </view>
 
-  <view class="bottom-actions">
-    <view class="bottom-btn" bindtap="goCalculator">回到计算器</view>
-  </view>
+  <view class="page-bottom-space"></view>
 </view>

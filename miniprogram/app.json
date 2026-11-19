@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/quote/quote",
     "pages/history/history",
     "pages/settings/settings"
   ],
@@ -9,6 +10,30 @@
     "navigationBarTitleText": "到手价计算器",
     "navigationBarBackgroundColor": "#f4f6f7",
     "backgroundColor": "#f4f6f7"
+  },
+  "tabBar": {
+    "color": "#8a959d",
+    "selectedColor": "#3f6b62",
+    "backgroundColor": "#fafcfc",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "计算器"
+      },
+      {
+        "pagePath": "pages/quote/quote",
+        "text": "报价"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "清单"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "默认设置"
+      }
+    ]
   },
   "style": "v2",
   "componentFramework": "glass-easel",

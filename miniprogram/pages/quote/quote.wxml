@@ -1,0 +1,282 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-kicker">CUSTOMER QUOTE</view>
+    <view class="hero-title">客户报价</view>
+    <view class="hero-sub">成本 + 加价 = 报价，可一次生成多条对比</view>
+  </view>
+
+  <!-- 成本 -->
+  <view class="card card-cost">
+    <view class="row-between">
+      <view>
+        <view class="card-title">到手成本</view>
+        <view class="card-sub">人民币，计算器算出的到手价</view>
+      </view>
+      <view class="mini-link" bindtap="goCalculator">去计算器</view>
+    </view>
+
+    <view class="money-input-row">
+      <text class="money-symbol">¥</text>
+      <input
+        class="money-input"
+        type="digit"
+        value="{{form.costCNY}}"
+        placeholder="0"
+        bindinput="onCostInput"
+      />
+      <text class="money-unit">元</text>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="row-between">
+      <view class="field-label">附加费用</view>
+      <view class="inline-hint">运费 / 包装 / 跑腿，算进成本</view>
+    </view>
+    <view class="money-input-row small">
+      <text class="money-symbol">¥</text>
+      <input
+        class="money-input"
+        type="digit"
+        value="{{form.extraFeeCNY}}"
+        placeholder="0"
+        bindinput="onExtraFeeInput"
+      />
+      <text class="money-unit">元</text>
+    </view>
+
+    <view class="highlight-box highlight-teal">
+      <text class="highlight-tag">报价基数</text>
+      <text class="highlight-text">{{costHint}}</text>
+    </view>
+  </view>
+
+  <!-- 文案 -->
+  <view class="card">
+    <view class="row-between">
+      <view>
+        <view class="card-title">发客户的文案</view>
+        <view class="card-sub">复制时一起带上</view>
+      </view>
+      <view class="inline-hint" wx:if="{{validityText}}">有效期 {{validityText}}</view>
+    </view>
+
+    <view class="field-block">
+      <input
+        class="text-input"
+        value="{{form.title}}"
+        placeholder="商品名，如 LV Carryall PM"
+        bindinput="onTitleInput"
+      />
+      <input
+        class="text-input"
+        value="{{form.note}}"
+        placeholder="附注，可不填，如支持验货"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <view class="field-block">
+      <view class="field-label">报价有效期</view>
+      <view class="chips">
+        <view
+          wx:for="{{validityOptions}}"
+          wx:key="value"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onValidityTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加价 -->
+  <view class="card">
+    <view class="card-title">加价方式</view>
+    <view class="segment three">
+      <view
+        class="segment-item {{form.mode === 'pct' ? 'active' : ''}}"
+        data-value="pct"
+        bindtap="onModeTap"
+      >按利润率</view>
+      <view
+        class="segment-item {{form.mode === 'fixed' ? 'active' : ''}}"
+        data-value="fixed"
+        bindtap="onModeTap"
+      >加固定金额</view>
+      <view
+        class="segment-item {{form.mode === 'both' ? 'active' : ''}}"
+        data-value="both"
+        bindtap="onModeTap"
+      >两种都列</view>
+    </view>
+
+    <view wx:if="{{form.mode !== 'fixed'}}" class="field-block">
+      <view class="row-between">
+        <view class="field-label">利润率</view>
+        <view class="inline-hint">可多选，同时列多条</view>
+      </view>
+      <view class="chips">
+        <view
+          wx:for="{{profitOptionsView}}"
+          wx:key="value"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onProfitChipTap"
+        >{{item.label}}</view>
+      </view>
+      <view class="custom-row">
+        <input
+          class="custom-input"
+          type="digit"
+          value="{{form.customProfit}}"
+          placeholder="自定义利润率"
+          bindinput="onCustomProfitInput"
+        />
+        <text class="custom-unit">%</text>
+        <view class="custom-add" bindtap="onAddCustomProfit">添加</view>
+      </view>
+    </view>
+
+    <view wx:if="{{form.mode !== 'pct'}}" class="field-block">
+      <view class="row-between">
+        <view class="field-label">固定加价</view>
+        <view class="inline-hint">在报价基数上直接加</view>
+      </view>
+      <view class="chips">
+        <view
+          wx:for="{{fixedOptionsView}}"
+          wx:key="value"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onFixedChipTap"
+        >{{item.label}}</view>
+      </view>
+      <view class="custom-row">
+        <input
+          class="custom-input"
+          type="digit"
+          value="{{form.customFixed}}"
+          placeholder="自定义加价"
+          bindinput="onCustomFixedInput"
+        />
+        <text class="custom-unit">元</text>
+        <view class="custom-add" bindtap="onAddCustomFixed">添加</view>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="field-label">利润口径</view>
+    <view class="two-options">
+      <view
+        class="option-card {{form.basis === 'costPlus' ? 'active' : ''}}"
+        data-value="costPlus"
+        bindtap="onBasisTap"
+      >
+        <view class="option-title">成本加成</view>
+        <view class="option-sub">成本 ×（1 + 利润率）</view>
+      </view>
+      <view
+        class="option-card {{form.basis === 'margin' ? 'active' : ''}}"
+        data-value="margin"
+        bindtap="onBasisTap"
+      >
+        <view class="option-title">毛利口径</view>
+        <view class="option-sub">成本 ÷（1 − 利润率）</view>
+      </view>
+    </view>
+
+    <view class="field-block">
+      <view class="row-between">
+        <view class="field-label">利润率底线</view>
+        <view class="inline-hint">低于底线的利润率报价会隐藏</view>
+      </view>
+      <view class="chips">
+        <view
+          wx:for="{{floorOptions}}"
+          wx:key="value"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onFloorTap"
+        >{{item.label}}</view>
+        <view class="chip-input-wrap">
+          <input
+            class="chip-input"
+            type="digit"
+            value="{{form.floorPct}}"
+            bindinput="onFloorInput"
+          />
+          <text class="chip-input-unit">%</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="field-block">
+      <view class="field-label">报价取整</view>
+      <view class="chips">
+        <view
+          wx:for="{{roundingOptions}}"
+          wx:key="value"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onRoundingTap"
+        >{{item.label}}</view>
+      </view>
+      <view class="footnote">取整按向上进位，避免报价低于目标利润。</view>
+    </view>
+
+    <view class="highlight-box highlight-amber">
+      <text class="highlight-tag">口径提示</text>
+      <text class="highlight-text">+10% 是成本加成（成本 × 1.1）；加价 ¥100 是直接在报价基数上加一百。</text>
+    </view>
+  </view>
+
+  <!-- 结果 -->
+  <view wx:if="{{hasQuote}}" class="card result-card">
+    <view class="row-between result-head">
+      <view>
+        <view class="card-title">报价结果</view>
+        <view class="card-sub">报价基数 {{baseCostText}}</view>
+      </view>
+      <text class="result-count">{{quoteLines.length}} 条</text>
+    </view>
+
+    <view wx:if="{{quoteLines.length}}" class="quote-list">
+      <view wx:for="{{quoteLines}}" wx:key="key" class="quote-row">
+        <view class="quote-main">
+          <view class="quote-label">{{item.label}}</view>
+          <view class="quote-meta">
+            利润 {{item.profitText}} · 实际毛利 {{item.marginText}}
+            <text wx:if="{{item.belowFloor}}" class="floor-badge">低于底线</text>
+          </view>
+        </view>
+        <view class="quote-price">{{item.priceText}}</view>
+        <view class="copy-btn" data-key="{{item.key}}" bindtap="onCopyLine">复制</view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-lines">
+      当前没有可展示的报价，请勾选利润率或固定加价。
+    </view>
+
+    <view wx:if="{{warnings.length}}" class="warnings">
+      <view wx:for="{{warnings}}" wx:key="*this" class="warning-item">• {{item}}</view>
+    </view>
+
+    <view class="result-actions">
+      <view class="action-btn secondary" bindtap="onClear">清空重填</view>
+      <view class="action-btn primary" bindtap="onCopyAll">复制全部文案</view>
+    </view>
+  </view>
+
+  <view wx:else class="card empty-quote">
+    <view class="empty-icon">¥</view>
+    <view class="empty-title">填入到手成本开始报价</view>
+    <view class="empty-sub">也可以先在计算器算出到手价，点“去报价”自动带入。</view>
+    <view class="empty-btn" bindtap="goCalculator">去计算器</view>
+  </view>
+
+  <view class="footnote center">报价只用于沟通，最终成交价以双方确认为准。</view>
+  <view class="page-bottom-space"></view>
+</view>

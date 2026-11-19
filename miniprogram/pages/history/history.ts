@@ -37,13 +37,7 @@ Page({
       return
     }
     restoreOrder(order)
-    const pages = getCurrentPages()
-    const previous = pages.length > 1 ? pages[pages.length - 2] : null
-    if (previous && previous.route === 'pages/index/index') {
-      wx.navigateBack()
-    } else {
-      wx.reLaunch({ url: '/pages/index/index' })
-    }
+    wx.switchTab({ url: '/pages/index/index' })
   },
 
   onDelete(e: WechatMiniprogram.TouchEvent) {
@@ -82,6 +76,6 @@ Page({
   },
 
   goCalculator() {
-    wx.reLaunch({ url: '/pages/index/index' })
+    wx.switchTab({ url: '/pages/index/index' })
   },
 })
