@@ -373,3 +373,141 @@
   color: #3a2400;
   box-shadow: 0 10rpx 22rpx rgba(255, 176, 32, 0.26);
 }
+
+/* Refined low-saturation palette */
+.page {
+  background-color: #f4f6f7;
+  background-image:
+    radial-gradient(circle at 6% 0%, rgba(95, 143, 132, 0.09), transparent 32%),
+    radial-gradient(circle at 94% 8%, rgba(138, 122, 168, 0.07), transparent 30%),
+    linear-gradient(180deg, #f4f6f7 0%, #f8fafa 45%, #f1f4f7 100%);
+}
+
+.hero-kicker {
+  color: #7c8f8a;
+}
+
+.hero-title {
+  color: #1f2a30;
+}
+
+.hero-sub {
+  color: #6b7780;
+}
+
+.card {
+  border-color: rgba(31, 45, 55, 0.08);
+  background: #ffffff;
+  box-shadow: 0 12rpx 30rpx rgba(31, 45, 55, 0.06);
+}
+
+.card::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.card-data::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.card-form::before {
+  background: linear-gradient(90deg, #5f8f84, #a8c4bb);
+}
+
+.card-params::before {
+  background: linear-gradient(90deg, #8a7aa8, #c3b8d4);
+}
+
+.card-title {
+  color: #1f2a30;
+}
+
+.card-sub {
+  color: #6b7780;
+}
+
+.row {
+  border-bottom-color: #e8edef;
+}
+
+.row-title {
+  color: #3f4a50;
+}
+
+.row-sub {
+  color: #6b7780;
+}
+
+.row-action {
+  border-color: #d5e3de;
+  background: #eff5f3;
+  color: #4f6b64;
+}
+
+.row-action.danger {
+  border-color: #e8d2ca;
+  background: #f7edea;
+  color: #8a5a48;
+}
+
+.help-link {
+  color: #4f7c74;
+}
+
+.param-item {
+  border-bottom-color: #e8edef;
+}
+
+.param-name {
+  color: #1f2a30;
+}
+
+.param-kind {
+  color: #6b7780;
+}
+
+.param-date {
+  color: #8a959d;
+}
+
+.confidence-official {
+  background: #e8f3ee;
+  color: #4f7a5e;
+}
+
+.confidence-measured {
+  background: #e9f0f7;
+  color: #4f6f8f;
+}
+
+.confidence-estimate {
+  background: #f4f0ec;
+  color: #8a6a55;
+}
+
+.param-desc {
+  color: #3f4a50;
+}
+
+.param-source {
+  color: #6b7780;
+}
+
+.disclaimer {
+  border-color: #dde3e6;
+  border-left-color: #6f8faf;
+  background: linear-gradient(135deg, #f4f6f7, #fbfcfc);
+}
+
+.disclaimer-title {
+  color: #4f6f8f;
+}
+
+.disclaimer-text {
+  color: #6b7780;
+}
+
+.bottom-btn {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 8rpx 18rpx rgba(79, 124, 116, 0.2);
+}

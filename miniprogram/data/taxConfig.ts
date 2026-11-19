@@ -48,7 +48,8 @@ export const MAX_QUANTITY = 99
 export const RATE_SOURCE_LABELS: Record<string, string> = {
   default: '默认参考价',
   market: '市场价',
-  cache: '缓存市场价',
+  shishihuilv: '实时汇率网',
+  cache: '缓存汇率',
   alipay: '支付宝口径估算',
   manual: '手填',
 }

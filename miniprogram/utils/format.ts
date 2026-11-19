@@ -38,11 +38,15 @@ export function formatCNY(value: number): string {
   return `${sign}¥${formatNumber(Math.abs(value), 2)}`
 }
 
-export function formatRate(value: number): string {
+export function formatRate(value: number, digits = 4): string {
   if (!Number.isFinite(value)) {
-    return '0.0000'
+    return digits === 8 ? '0.00000000' : '0.0000'
   }
-  return value.toFixed(4)
+  return value.toFixed(digits)
+}
+
+export function formatRatePrecise(value: number): string {
+  return formatRate(value, 8)
 }
 
 export function formatPct(value: number, digits = 2): string {

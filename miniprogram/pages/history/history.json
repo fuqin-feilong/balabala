@@ -1,7 +1,7 @@
 {
   "navigationBarTitleText": "算过的单",
-  "navigationBarBackgroundColor": "#fff8ec",
+  "navigationBarBackgroundColor": "#f4f6f7",
   "navigationBarTextStyle": "black",
-  "backgroundColor": "#fff8ec",
+  "backgroundColor": "#f4f6f7",
   "usingComponents": {}
 }

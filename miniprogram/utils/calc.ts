@@ -313,7 +313,7 @@ export function calculate(input: CalcInput): CalcResult {
       }
 
       const payoutRule: PayoutRounding =
-        input.addon?.payoutRounding ||
+        (input.addon && input.addon.payoutRounding) ||
         input.company.payoutRounding || { unitJPY: 1, mode: 'floor' }
       netRefundJPY = roundPayout(netRefundBeforeRoundingJPY, payoutRule)
       roundingLossJPY = Math.max(0, netRefundBeforeRoundingJPY - netRefundJPY)
@@ -347,7 +347,7 @@ export function calculate(input: CalcInput): CalcResult {
   }
 
   const payoutRule: PayoutRounding =
-    input.addon?.payoutRounding ||
+    (input.addon && input.addon.payoutRounding) ||
     input.company.payoutRounding || { unitJPY: 1, mode: 'floor' }
 
   return {

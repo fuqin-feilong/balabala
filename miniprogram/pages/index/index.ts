@@ -32,6 +32,7 @@ import {
   formatPct,
   formatPctValue,
   formatRate,
+  formatRatePrecise,
   formatShortTime,
   formatYen,
   parseNumber,
@@ -210,6 +211,8 @@ Page({
     feeExtraText: '',
     headerSummary: '',
     rateDisplay: '',
+    rateExactText: '',
+    showExactRate: false,
     marketRateDisplay: '',
     alipayRateDisplay: '',
     rateSourceLabel: '',
@@ -407,12 +410,15 @@ Page({
       feeExtraText: feeExtraParts.join(' · '),
       headerSummary: `${settlementLabel} · ${company.name}${
         form.settlementMode === 'refund' && addon ? ` + ${addon.name}` : ''
-      } · ${headerFeeText} · 汇率 ${formatRate(rate)}${
+      } · ${headerFeeText} · 汇率 ${formatRate(rate, 6)}${
         headerTimeText ? ` · ${headerTimeText}` : ''
       }`,
-      rateDisplay: formatRate(rate),
-      marketRateDisplay: formatRate(marketRate),
-      alipayRateDisplay: formatRate(marketRate * (1 + ALIPAY_SPREAD_PCT / 100)),
+      rateDisplay: formatRate(rate, 6),
+      rateExactText: formatRatePrecise(rate),
+      showExactRate:
+        form.rateSource === 'shishihuilv' || form.rateSource === 'cache',
+      marketRateDisplay: formatRate(marketRate, 6),
+      alipayRateDisplay: formatRate(marketRate * (1 + ALIPAY_SPREAD_PCT / 100), 6),
       rateSourceLabel: RATE_SOURCE_LABELS[form.rateSource] || '手填',
       rateUpdatedText:
         form.rateSource === 'manual'
@@ -425,7 +431,7 @@ Page({
       thresholdHint: `免税门槛：未税 ${formatYen(
         TAX_FREE_MIN_PRE_TAX_JPY
       )} 円（${form.taxRatePct}% 商品含税约 ${formatYen(thresholdIncl)} 円）`,
-      presetNote: selectedPreset?.note || '',
+      presetNote: selectedPreset ? selectedPreset.note || '' : '',
       isManualCompany: company.kind === 'manual',
       canResetFee: form.feeCustom || form.presetId !== 'default',
       hasOptionalFee: company.fees.some(rule => rule.optional),
@@ -481,7 +487,8 @@ Page({
           form.settlementMode === 'taxFree'
             ? form.cardRatePer100
             : form.ratePer100
-        )
+        ),
+        6
       ),
       actualBadge: calculated.usedActualRefund,
     }
@@ -526,7 +533,7 @@ Page({
           : '—',
       impliedRateText:
         reconciled.impliedRatePer100 != null
-          ? `${formatRate(reconciled.impliedRatePer100)} 元/100日元`
+          ? `${formatRate(reconciled.impliedRatePer100, 6)} 元/100日元`
           : '—',
       hiddenLossText:
         reconciled.hiddenLossCNY != null
@@ -771,7 +778,7 @@ Page({
     const rate = market * (1 + ALIPAY_SPREAD_PCT / 100)
     this.setData(
       {
-        'form.ratePer100': rate.toFixed(4),
+        'form.ratePer100': rate.toFixed(6),
         'form.rateSource': 'alipay',
       },
       () => this.recalculate()
@@ -784,23 +791,44 @@ Page({
       .then(result => {
         this.setData(
           {
-            'form.marketRatePer100': result.ratePer100.toFixed(4),
-            'form.ratePer100': result.ratePer100.toFixed(4),
-            'form.cardRatePer100': result.ratePer100.toFixed(4),
-            'form.rateSource': result.cached ? 'cache' : 'market',
+            'form.marketRatePer100': result.ratePer100.toFixed(8),
+            'form.ratePer100': result.ratePer100.toFixed(8),
+            'form.cardRatePer100': result.ratePer100.toFixed(8),
+            'form.rateSource': result.cached ? 'cache' : 'shishihuilv',
             'form.rateUpdatedAt': result.updatedAt,
           },
           () => this.recalculate()
         )
         wx.hideLoading()
         wx.showToast({
-          title: result.cached ? '使用缓存汇率' : '汇率已同步',
+          title: result.cached ? '使用缓存汇率' : '已同步实时汇率网',
           icon: 'none',
         })
       })
-      .catch(() => {
+      .catch((error: Error) => {
         wx.hideLoading()
-        wx.showToast({ title: '同步失败，请手填', icon: 'none' })
+        const message = error && error.message ? error.message : ''
+        const isDomainIssue = message.indexOf('url not in domain list') >= 0
+        const isTimeout = message.indexOf('timeout') >= 0
+        const isParseIssue = message.indexOf('解析失败') >= 0
+        let content = message || '请检查网络后重试，也可以手动填写汇率。'
+
+        if (isDomainIssue) {
+          content = `实时汇率网域名未配置或未生效：\n${message}\n\n请确认：\n1. appid 是否是 wx231159bb126cf0b9\n2. 是否加在 request 合法域名\n3. 域名保存后是否重新上传体验版\n4. 手机是否还在跑旧体验版`
+        } else if (isTimeout) {
+          content = '请求超时，请稍后重试；也可以直接在计算器里手填汇率。'
+        } else if (isParseIssue) {
+          content =
+            '实时汇率网页结构可能改版，请手动填写汇率，或稍后重试。'
+        }
+
+        console.error('汇率同步失败：', message)
+        wx.showModal({
+          title: '汇率同步失败',
+          content,
+          showCancel: false,
+          confirmText: '知道了',
+        })
       })
   },
 

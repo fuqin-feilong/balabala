@@ -117,7 +117,7 @@ Page({
     wx.showModal({
       title: '汇率同步说明',
       content:
-        '同步市场价使用公开汇率接口。微信小程序需要在公众平台把接口域名加入 request 合法域名；未配置或请求失败时，请直接在计算器里手填汇率。免费接口多为日更，不承诺实时。',
+        '汇率同步只抓取实时汇率网 JPY/CNY 页面，失败时使用本地缓存，再失败请手动填写。需要在微信公众平台把 www.shishihuilv.com 加入 request 合法域名。第三方网页可能改版或限流，数据仅供参考。',
       showCancel: false,
       confirmText: '知道了',
     })

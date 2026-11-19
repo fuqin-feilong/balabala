@@ -236,7 +236,7 @@
       <view wx:if="{{presetNote}}" class="preset-note">{{presetNote}}</view>
       <view wx:if="{{isManualCompany}}" class="highlight-box highlight-violet mini">
         <text class="highlight-tag">手动模式</text>
-        <text class="highlight-text">在“高级 / 明细”里切换计费基数、定额和最低收费。</text>
+        <text class="highlight-text">直接在下方手动填写手续费</text>
       </view>
 
       <block wx:if="{{form.settlementMode === 'refund'}}">
@@ -347,8 +347,9 @@
             <view class="section-label">汇率 · 100 日元</view>
             <view class="rate-big">{{rateDisplay}} <text class="rate-unit">元</text></view>
             <view class="rate-sub">{{rateSourceLabel}} · {{rateUpdatedText}}</view>
+            <view wx:if="{{showExactRate}}" class="rate-exact">网页原始值 {{rateExactText}}</view>
           </view>
-          <view class="sync-btn" bindtap="onSyncRate">同步市场价</view>
+          <view class="sync-btn" bindtap="onSyncRate">同步实时汇率</view>
         </view>
 
         <view class="chips">

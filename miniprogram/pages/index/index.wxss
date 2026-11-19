@@ -1920,3 +1920,757 @@
   color: #ffffff;
   box-shadow: 0 6rpx 14rpx rgba(245, 158, 11, 0.28);
 }
+
+/* ============================================================
+   Refined low-saturation palette
+   冷灰绿底 / 雾蓝 / 豆沙红 / 灰紫
+   彻底取消黄色底色
+   ============================================================ */
+
+.page {
+  background-color: #f4f6f7;
+  background-image:
+    radial-gradient(circle at 6% 0%, rgba(95, 143, 132, 0.1), transparent 32%),
+    radial-gradient(circle at 94% 10%, rgba(111, 143, 175, 0.09), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(138, 122, 168, 0.06), transparent 35%),
+    linear-gradient(180deg, #f4f6f7 0%, #f8fafa 45%, #f1f5f5 100%);
+}
+
+.hero-kicker {
+  color: #7c8f8a;
+}
+
+.hero-title {
+  color: #1f2a30;
+}
+
+.hero-sub {
+  color: #6b7780;
+}
+
+.badge-amber {
+  background: #eef2f0;
+  color: #4f6b64;
+}
+
+.badge-teal {
+  background: #eaf2f0;
+  color: #3f6b62;
+}
+
+.badge-coral {
+  background: #f6ecec;
+  color: #8a4a4a;
+}
+
+.card,
+.result-card,
+.empty-state {
+  border-color: rgba(31, 45, 55, 0.08);
+  box-shadow: 0 12rpx 30rpx rgba(31, 45, 55, 0.06);
+}
+
+.card {
+  background: #ffffff;
+}
+
+.card::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.card-price {
+  background: linear-gradient(160deg, #ffffff 0%, #fbfcfc 100%);
+}
+
+.card-price::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.card-tax {
+  background: linear-gradient(160deg, #ffffff 0%, #fbfdfc 100%);
+}
+
+.card-tax::before {
+  background: linear-gradient(90deg, #5f8f84, #a8c4bb);
+}
+
+.card-refund {
+  background: linear-gradient(160deg, #ffffff 0%, #fbfcfc 100%);
+}
+
+.card-refund::before {
+  background: linear-gradient(90deg, #4f7c74, #9bbcb3);
+}
+
+.card-reconcile {
+  background: linear-gradient(160deg, #ffffff 0%, #fcfbfd 100%);
+}
+
+.card-reconcile::before {
+  background: linear-gradient(90deg, #8a7aa8, #c3b8d4);
+}
+
+.card-cashback {
+  background: linear-gradient(160deg, #ffffff 0%, #fffcfc 100%);
+}
+
+.card-cashback::before {
+  background: linear-gradient(90deg, #b56b6b, #d8b0b0);
+}
+
+.card-title {
+  color: #1f2a30;
+}
+
+.card-sub {
+  color: #6b7780;
+}
+
+.card-summary {
+  color: #4f7c74;
+}
+
+.chevron {
+  color: #7c8f8a;
+}
+
+.section-label {
+  color: #1f2a30;
+}
+
+.section-note {
+  color: #4f7c74;
+}
+
+.segment {
+  background: #eef1f2;
+}
+
+.segment-item {
+  color: #6b7780;
+}
+
+.segment-item.active {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 5rpx 14rpx rgba(79, 124, 116, 0.22);
+}
+
+.price-input-row {
+  border-bottom-color: #d9e4e1;
+}
+
+.price-currency {
+  color: #5f7f9f;
+}
+
+.price-input {
+  color: #1f2a30;
+}
+
+.price-unit {
+  color: #6b7780;
+}
+
+.quick-chip {
+  border-color: #e2e9e7;
+  background: #f2f7f5;
+  color: #4f6b64;
+}
+
+.inline-hint {
+  color: #6b7780;
+}
+
+.chip {
+  border-color: transparent;
+  background: #f2f5f6;
+  color: #5f6b73;
+}
+
+.chip.active {
+  border-color: #4f7c74;
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 6rpx 16rpx rgba(79, 124, 116, 0.2);
+}
+
+.chip.subtle {
+  border-color: #d5e3e6;
+  background: #eff5f6;
+  color: #4f6f7f;
+}
+
+.chip.subtle.active {
+  border-color: #5f7f9f;
+  background: linear-gradient(135deg, #6f8faf, #5f7f9f);
+  color: #ffffff;
+  box-shadow: 0 6rpx 16rpx rgba(95, 127, 159, 0.2);
+}
+
+.chip.addon-chip {
+  border-color: #e8d2ca;
+  background: #f7edea;
+  color: #8a5a48;
+}
+
+.chip.addon-chip.active {
+  border-color: #a9674f;
+  background: linear-gradient(135deg, #b8795e, #a9674f);
+  color: #ffffff;
+  box-shadow: 0 6rpx 16rpx rgba(169, 103, 79, 0.2);
+}
+
+.chip-input-wrap {
+  border-color: #c9d6da;
+  background: #fbfcfc;
+}
+
+.option-card {
+  border-color: #e4eaec;
+  background: #f7f9fa;
+}
+
+.option-card.active {
+  border-color: #8fb3aa;
+  background: #edf5f2;
+  box-shadow: 0 6rpx 16rpx rgba(95, 143, 132, 0.12);
+}
+
+.option-card.active .option-title {
+  color: #3f6b62;
+}
+
+.option-title {
+  color: #3f4a50;
+}
+
+.option-sub {
+  color: #6b7780;
+}
+
+.company-meta {
+  border-color: #dce7ee;
+  border-left-color: #6f8faf;
+  background: #f0f5f8;
+}
+
+.meta-tag {
+  background: #e3edf4;
+  color: #4f6f8f;
+}
+
+.meta-text {
+  color: #6b7780;
+}
+
+.company-desc {
+  color: #3f4a50;
+}
+
+.company-source {
+  color: #6b7780;
+}
+
+.confidence-official {
+  background: #e8f3ee;
+  color: #4f7a5e;
+}
+
+.confidence-measured {
+  background: #e9f0f7;
+  color: #4f6f8f;
+}
+
+.confidence-estimate {
+  background: #f4f0ec;
+  color: #8a6a55;
+}
+
+.preset-note {
+  border-left-color: #8fb3aa;
+  background: #eef5f2;
+  color: #3f6b62;
+}
+
+.fee-row {
+  border-color: #dde8e4;
+  border-left-color: #9bbcb3;
+  background: #f7faf9;
+}
+
+.fee-input-row {
+  border-bottom-color: #c9dcd7;
+}
+
+.fee-input {
+  color: #1f2a30;
+}
+
+.fee-unit {
+  color: #4f7c74;
+}
+
+.fee-basis {
+  color: #6b7780;
+}
+
+.fee-basis-pill {
+  background: #e8f1ef;
+  color: #3f6b62;
+}
+
+.basis-amber {
+  background: #e8f1ef;
+  color: #3f6b62;
+}
+
+.basis-coral {
+  background: #f6ecec;
+  color: #8a4a4a;
+}
+
+.basis-blue {
+  background: #e9f0f7;
+  color: #4f6f8f;
+}
+
+.basis-violet {
+  background: #f1eef5;
+  color: #5f4f7f;
+}
+
+.fee-extra-pill {
+  background: #eaf2f0;
+  color: #3f6b62;
+}
+
+.stepper {
+  border-color: #d5e3de;
+  background: #eff5f3;
+}
+
+.stepper-btn {
+  color: #4f7c74;
+  box-shadow: 0 4rpx 10rpx rgba(79, 124, 116, 0.08);
+}
+
+.stepper-value {
+  color: #1f2a30;
+}
+
+.text-link {
+  color: #4f7c74;
+}
+
+.advanced-box {
+  border-color: #e4eaec;
+  background: #f7f9fa;
+}
+
+.mini-chip {
+  border-color: #e4eaec;
+  background: #ffffff;
+}
+
+.mini-chip.active {
+  border-color: #8fb3aa;
+  background: #e8f1ef;
+  color: #3f6b62;
+}
+
+.mini-input {
+  border-color: #e4eaec;
+  background: #ffffff;
+}
+
+.advanced-tip {
+  color: #6b7780;
+}
+
+.fee-lines {
+  border-top-color: #dde8e4;
+}
+
+.fee-line-label {
+  color: #3f4a50;
+}
+
+.fee-line-basis {
+  color: #6b7780;
+}
+
+.fee-line-amount {
+  color: #a95f5f;
+}
+
+.rate-block {
+  border-color: #c9dcd7;
+  border-left-color: #5f8f84;
+  background: linear-gradient(135deg, #f1f7f6, #eaf1f5);
+}
+
+.rate-big {
+  color: #22343a;
+}
+
+.rate-unit {
+  color: #4f7c74;
+}
+
+.rate-sub {
+  color: #4f7c74;
+}
+
+.sync-btn {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  white-space: nowrap;
+  box-shadow: 0 6rpx 16rpx rgba(79, 124, 116, 0.2);
+}
+
+.manual-rate-row {
+  border-color: #c9dcd7;
+  background: #ffffff;
+}
+
+.manual-label {
+  color: #4f7c74;
+}
+
+.manual-rate-input {
+  color: #1f2a30;
+}
+
+.manual-unit {
+  color: #6b7780;
+}
+
+.rate-foot {
+  background: rgba(255, 255, 255, 0.65);
+  color: #4f7c74;
+}
+
+.highlight-amber {
+  border-color: #b8795e;
+  background: #f7efeb;
+  color: #7a4a38;
+}
+
+.highlight-amber .highlight-tag {
+  background: #b8795e;
+}
+
+.highlight-teal {
+  border-color: #5f8f84;
+  background: #edf5f2;
+  color: #3f6b62;
+}
+
+.highlight-teal .highlight-tag {
+  background: #5f8f84;
+}
+
+.highlight-coral {
+  border-color: #b56b6b;
+  background: #f8efef;
+  color: #8a4a4a;
+}
+
+.highlight-coral .highlight-tag {
+  background: #b56b6b;
+}
+
+.highlight-blue {
+  border-color: #6f8faf;
+  background: #eef3f8;
+  color: #3f5f7f;
+}
+
+.highlight-blue .highlight-tag {
+  background: #6f8faf;
+}
+
+.highlight-violet {
+  border-color: #8a7aa8;
+  background: #f3f0f7;
+  color: #5f4f7f;
+}
+
+.highlight-violet .highlight-tag {
+  background: #8a7aa8;
+}
+
+.field-label {
+  color: #3f4a50;
+}
+
+.field-hint {
+  color: #6b7780;
+}
+
+.field-input {
+  color: #1f2a30;
+}
+
+.field-unit {
+  color: #6b7780;
+}
+
+.field-row {
+  border-bottom-color: #e8edef;
+}
+
+.switch-row {
+  color: #3f4a50;
+}
+
+.reconcile-result {
+  border-color: #ddd5e7;
+  border-left-color: #8a7aa8;
+  background: linear-gradient(135deg, #f5f2f8, #f0f3f8);
+}
+
+.reconcile-neutral {
+  background: #edeaf3;
+  color: #5f4f7f;
+}
+
+.reconcile-warn {
+  background: #f8efef;
+  color: #8a4a4a;
+}
+
+.reconcile-good {
+  background: #edf5f2;
+  color: #3f6b62;
+}
+
+.reconcile-result .grid-item {
+  border-color: #e7e2ee;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.reconcile-result .grid-label {
+  color: #7a6f8a;
+}
+
+.reconcile-result .grid-value {
+  color: #3f344f;
+}
+
+.reconcile-tip {
+  color: #5f4f7f;
+}
+
+.result-grid .grid-item {
+  background: #f7f9fa;
+}
+
+.result-grid .grid-label {
+  color: #6b7780;
+}
+
+.result-grid .grid-value {
+  color: #1f2a30;
+}
+
+.cashback-badge {
+  background: linear-gradient(135deg, #b56b6b, #a95f5f);
+  color: #ffffff;
+  box-shadow: 0 6rpx 16rpx rgba(169, 95, 95, 0.18);
+}
+
+.result-card {
+  border-color: #3e5f5b;
+  background: linear-gradient(135deg, #1e2e33 0%, #274246 50%, #2e4f4c 100%);
+  box-shadow: 0 20rpx 46rpx rgba(30, 46, 51, 0.24);
+}
+
+.result-label {
+  color: #b9d6cf;
+}
+
+.result-value {
+  color: #eef5f2;
+}
+
+.result-per {
+  color: #c7ddd7;
+}
+
+.result-badge {
+  background: rgba(185, 214, 207, 0.15);
+  color: #d7ebe5;
+}
+
+.result-save-row {
+  background: rgba(185, 214, 207, 0.12);
+}
+
+.saving {
+  color: #d7ebe5;
+}
+
+.actual-badge {
+  background: #5f8f84;
+}
+
+.result-card .grid-item {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.result-card .grid-label {
+  color: #b9d6cf;
+}
+
+.result-card .grid-value {
+  color: #ffffff;
+}
+
+.breakdown {
+  border-top-color: rgba(185, 214, 207, 0.16);
+}
+
+.breakdown-row {
+  color: #c7ddd7;
+}
+
+.breakdown-row text:last-child {
+  color: #eaf4f1;
+}
+
+.warnings {
+  border-color: rgba(181, 107, 107, 0.35);
+  background: rgba(181, 107, 107, 0.2);
+}
+
+.warning-item {
+  color: #f2d2d2;
+}
+
+.notes {
+  border-color: rgba(95, 143, 132, 0.22);
+  background: rgba(95, 143, 132, 0.14);
+}
+
+.note-item {
+  color: #c7ddd7;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #b9d6cf, #9bbcb3);
+  color: #1e2e33;
+  box-shadow: 0 8rpx 18rpx rgba(185, 214, 207, 0.18);
+}
+
+.action-btn.secondary {
+  border-color: rgba(199, 221, 215, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf4f1;
+}
+
+.empty-state {
+  border-color: #dde8e4;
+  background: linear-gradient(135deg, #ffffff, #f7faf9);
+}
+
+.empty-icon {
+  background: linear-gradient(135deg, #ddebe6, #c7ddd7);
+  color: #3f6b62;
+}
+
+.empty-title {
+  color: #3f4a50;
+}
+
+.empty-sub {
+  color: #6b7780;
+}
+
+.disclaimer {
+  border-color: #dde3e6;
+  border-left-color: #6f8faf;
+  background: linear-gradient(135deg, #f4f6f7, #fbfcfc);
+}
+
+.disclaimer-title {
+  color: #4f6f8f;
+}
+
+.disclaimer-text {
+  color: #6b7780;
+}
+
+.bottom-nav {
+  border-top-color: #e1e8ea;
+  background: rgba(250, 252, 252, 0.98);
+}
+
+.nav-item {
+  color: #8a959d;
+}
+
+.nav-item.active {
+  color: #3f6b62;
+}
+
+.nav-item.active .nav-icon {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 6rpx 14rpx rgba(79, 124, 116, 0.2);
+}
+
+/* Final neutral cleanup */
+.tax-hint,
+.fee-extra {
+  color: #6b7780;
+}
+
+.chip-input-unit,
+.grid-label {
+  color: #6b7780;
+}
+
+.advanced-label {
+  color: #3f4a50;
+}
+
+.chip-input {
+  color: #3f4a50;
+}
+
+.grid-value {
+  color: #1f2a30;
+}
+
+.divider {
+  background: #e8edef;
+}
+
+.advanced-row + .advanced-row {
+  border-top-color: #e8edef;
+}
+
+.grid-item {
+  background: #f7f9fa;
+}
+
+.price-input::placeholder,
+.fee-input::placeholder,
+.field-input::placeholder,
+.manual-rate-input::placeholder {
+  color: #b8c3c9;
+}
+
+.result-card {
+  color: #eaf4f1;
+}
+
+.rate-exact {
+  margin-top: 4rpx;
+  color: #7b8794;
+  font-size: 18rpx;
+  letter-spacing: 0.5rpx;
+}

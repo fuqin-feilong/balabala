@@ -323,3 +323,117 @@
   background: #fff6de;
   color: #7c4a03;
 }
+
+/* Refined low-saturation palette */
+.page {
+  background-color: #f4f6f7;
+  background-image:
+    radial-gradient(circle at 6% 0%, rgba(95, 143, 132, 0.09), transparent 32%),
+    radial-gradient(circle at 94% 8%, rgba(111, 143, 175, 0.08), transparent 30%),
+    linear-gradient(180deg, #f4f6f7 0%, #f8fafa 45%, #f1f5f5 100%);
+}
+
+.hero-kicker {
+  color: #7c8f8a;
+}
+
+.hero-title {
+  color: #1f2a30;
+}
+
+.hero-sub {
+  color: #6b7780;
+}
+
+.order-card {
+  border-color: rgba(31, 45, 55, 0.08);
+  background: #ffffff;
+  box-shadow: 0 12rpx 30rpx rgba(31, 45, 55, 0.06);
+}
+
+.order-card::before {
+  background: linear-gradient(90deg, #6f8faf, #afc3d5);
+}
+
+.order-title {
+  color: #1f2a30;
+}
+
+.order-time {
+  color: #6b7780;
+}
+
+.order-price {
+  color: #4f7c74;
+}
+
+.order-sub {
+  color: #6b7780;
+}
+
+.order-grid .grid-item {
+  border-color: #dde8e4;
+  background: #f1f7f5;
+}
+
+.order-grid .grid-label {
+  color: #4f7c74;
+}
+
+.order-grid .grid-value {
+  color: #1f2a30;
+}
+
+.delete-link {
+  color: #a95f5f;
+}
+
+.clear-btn {
+  border-color: #dde3e6;
+  background: #f2f5f6;
+  color: #5f6b73;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+  box-shadow: 0 8rpx 18rpx rgba(79, 124, 116, 0.18);
+}
+
+.empty-state {
+  border-color: #dde8e4;
+  background: linear-gradient(135deg, #ffffff, #f7faf9);
+}
+
+.empty-icon {
+  background: linear-gradient(135deg, #ddebe6, #c7ddd7);
+  color: #3f6b62;
+}
+
+.empty-title {
+  color: #3f4a50;
+}
+
+.empty-sub {
+  color: #6b7780;
+}
+
+.empty-btn {
+  background: linear-gradient(135deg, #5f8f84, #4f7c74);
+  color: #ffffff;
+}
+
+.tip {
+  border-left-color: #6f8faf;
+  background: #f4f6f7;
+  color: #5f6b73;
+}
+
+/* Final neutral cleanup */
+.order-meta {
+  color: #6b7780;
+}
+
+.grid-label {
+  color: #6b7780;
+}
