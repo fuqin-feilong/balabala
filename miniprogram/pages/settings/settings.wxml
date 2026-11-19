@@ -1,0 +1,83 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-kicker">SETTINGS</view>
+    <view class="hero-title">设置</view>
+    <view class="hero-sub">参数版本 {{dataVersion}} · 本地存储，不需要登录</view>
+  </view>
+
+  <view class="card card-data">
+    <view class="card-title">数据</view>
+    <view class="row">
+      <view>
+        <view class="row-title">算过的单</view>
+        <view class="row-sub">保存 {{orderCount}} 单</view>
+      </view>
+      <view class="row-action" bindtap="goHistory">查看</view>
+    </view>
+    <view class="row">
+      <view>
+        <view class="row-title">清空历史订单</view>
+        <view class="row-sub">删除后无法恢复</view>
+      </view>
+      <view class="row-action danger" bindtap="onClearHistory">清空</view>
+    </view>
+  </view>
+
+  <view class="card card-form">
+    <view class="card-title">表单与汇率</view>
+    <view class="row">
+      <view>
+        <view class="row-title">恢复默认表单</view>
+        <view class="row-sub">清除当前输入和自定义费率</view>
+      </view>
+      <view class="row-action" bindtap="onResetForm">恢复</view>
+    </view>
+    <view class="row">
+      <view>
+        <view class="row-title">清除汇率缓存</view>
+        <view class="row-sub">下次同步会重新请求市场价</view>
+      </view>
+      <view class="row-action" bindtap="onClearRateCache">清除</view>
+    </view>
+    <view class="row">
+      <view>
+        <view class="row-title">汇率同步说明</view>
+        <view class="row-sub">合法域名、接口频率、手填回退</view>
+      </view>
+      <view class="row-action" bindtap="onRateHelp">查看</view>
+    </view>
+  </view>
+
+  <view class="card card-params">
+    <view class="section-head">
+      <view>
+        <view class="card-title">退税参数</view>
+        <view class="card-sub">费率跟店走，可在计算器里按小票手改</view>
+      </view>
+      <view class="help-link" bindtap="onParamHelp">说明</view>
+    </view>
+
+    <view wx:for="{{params}}" wx:key="id" class="param-item">
+      <view class="param-top">
+        <view class="param-name-row">
+          <text class="param-name">{{item.name}}</text>
+          <text class="param-kind">{{item.kindLabel}}</text>
+          <text class="confidence {{item.confidenceClass}}">{{item.confidenceLabel}}</text>
+        </view>
+        <text class="param-date">{{item.verifiedAt}}</text>
+      </view>
+      <view class="param-desc">{{item.description}}</view>
+      <view class="param-source">{{item.sourceNote}}</view>
+    </view>
+  </view>
+
+  <view class="disclaimer">
+    <view class="disclaimer-title">免责声明</view>
+    <view class="disclaimer-text">本工具只做估算，不构成退税/汇率承诺。实际退税额、手续费和汇率以门店、退税公司、银行/支付渠道的最终结果为准。</view>
+    <view class="disclaimer-text">2026.11.1 起日本免税改为「先付后退」：同店同日未税满 5,000 円，离境海关确认后退税。</view>
+  </view>
+
+  <view class="bottom-actions">
+    <view class="bottom-btn" bindtap="goCalculator">回到计算器</view>
+  </view>
+</view>

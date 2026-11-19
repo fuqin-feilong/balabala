@@ -1,84 +1,526 @@
-<scroll-view class="page" scroll-y>
-  <view class="announcement">
-    <text class="announcement-label">公告</text>
-    <view class="ticker-window">
-      <view class="ticker-track">
-        <text class="ticker-text">{{announcement}}</text>
-        <text class="ticker-text">{{announcement}}</text>
+<view class="page">
+  <view class="hero">
+    <view class="hero-kicker">日本购物 · 退税 · 汇率</view>
+    <view class="hero-title">到手价计算器</view>
+    <view class="hero-sub">含税 / 不含税均可，支持 8% 与 10% 税率</view>
+    <view class="hero-badges">
+      <text class="hero-badge badge-amber">2026.11 先付后退</text>
+      <text class="hero-badge badge-teal">8% / 10% 税率</text>
+      <text class="hero-badge badge-coral">5,000 円未税门槛</text>
+    </view>
+  </view>
+
+  <!-- 商品价格 -->
+  <view class="card card-price">
+    <view class="card-head">
+      <view class="card-head-main">
+        <view class="card-title">商品价格（单价）</view>
+        <view class="card-sub">数量在退税卡里设置；同店同日可合并成一张单</view>
+      </view>
+      <view class="segment small">
+        <view
+          class="segment-item {{form.priceMode === 'included' ? 'active' : ''}}"
+          data-field="priceMode"
+          data-value="included"
+          bindtap="onOptionTap"
+        >含税价</view>
+        <view
+          class="segment-item {{form.priceMode === 'excluded' ? 'active' : ''}}"
+          data-field="priceMode"
+          data-value="excluded"
+          bindtap="onOptionTap"
+        >不含税价</view>
+      </view>
+    </view>
+
+    <view class="price-input-row">
+      <text class="price-currency">¥</text>
+      <input
+        class="price-input"
+        type="digit"
+        value="{{form.price}}"
+        placeholder="0"
+        data-field="price"
+        bindinput="onFieldInput"
+      />
+      <text class="price-unit">日元</text>
+    </view>
+
+    <view class="quick-row">
+      <view class="quick-chip" data-value="5000" bindtap="onQuickPrice">¥5,000</view>
+      <view class="quick-chip" data-value="10000" bindtap="onQuickPrice">¥10,000</view>
+      <view class="quick-chip" data-value="30000" bindtap="onQuickPrice">¥30,000</view>
+      <view class="quick-chip" data-value="50000" bindtap="onQuickPrice">¥50,000</view>
+    </view>
+
+    <view class="highlight-box highlight-amber">
+      <text class="highlight-tag">免税门槛</text>
+      <text class="highlight-text">{{thresholdHint}}</text>
+    </view>
+  </view>
+
+  <!-- 税率 / 折扣 -->
+  <view class="card card-tax">
+    <view class="row-between">
+      <view>
+        <view class="card-title">消费税率</view>
+        <view class="card-sub">按商品实际税率选择</view>
+      </view>
+      <view class="segment small">
+        <view
+          wx:for="{{taxRates}}"
+          wx:key="value"
+          class="segment-item {{form.taxRatePct === item.value ? 'active' : ''}}"
+          data-field="taxRatePct"
+          data-value="{{item.value}}"
+          bindtap="onNumberChipTap"
+        >{{item.label}}</view>
+      </view>
+    </view>
+    <view class="highlight-box highlight-teal">
+      <text class="highlight-tag">税率提示</text>
+      <text class="highlight-text">{{form.taxRatePct === 8 ? '8% 适用于食品/饮料等轻减税率' : '10% 适用于一般商品'}} · 混合税率分开算税额，门槛按同店同日合计判断</text>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="row-between">
+      <view class="card-title">店铺折扣</view>
+      <view class="inline-hint">5% = 打95折</view>
+    </view>
+    <view class="chips">
+      <view
+        wx:for="{{discountOptions}}"
+        wx:key="value"
+        class="chip {{form.discountPct === item.value ? 'active' : ''}}"
+        data-field="discountPct"
+        data-value="{{item.value}}"
+        bindtap="onNumberChipTap"
+      >{{item.label}}</view>
+      <view class="chip-input-wrap">
+        <input
+          class="chip-input"
+          type="digit"
+          value="{{form.discountPct}}"
+          bindinput="onDiscountInput"
+        />
+        <text class="chip-input-unit">%</text>
       </view>
     </view>
   </view>
 
-  <view class="calculator">
-    <view class="title">日本购物百货成本计算器</view>
-
-    <view class="form">
-      <view class="form-row">
-        <text class="label">含税原价</text>
-        <view class="input-with-unit">
-          <input class="input" type="digit" value="{{form.taxIncludedPrice}}" data-field="taxIncludedPrice" bindfocus="onInputFocus" bindinput="onInputChange" />
-          <text class="input-unit">JPY</text>
-        </view>
+  <!-- 结果 -->
+  <view wx:if="{{hasResult}}" class="result-card">
+    <view class="result-top">
+      <view>
+        <view class="result-label">{{result.showPerUnit ? '合计到手价' : '预计到手价'}}</view>
+        <view class="result-value">{{result.netCostText}}</view>
+        <view wx:if="{{result.showPerUnit}}" class="result-per">单件 {{result.perUnitText}}</view>
       </view>
-      <view class="form-row">
-        <text class="label">折扣（无折扣填1）</text>
-        <input class="input" type="digit" value="{{form.discount}}" data-field="discount" bindfocus="onInputFocus" bindinput="onInputChange" />
-      </view>
-      <view class="form-row">
-        <text class="label">刷卡汇率</text>
-        <input class="input" type="digit" value="{{form.cardRate}}" data-field="cardRate" bindfocus="onInputFocus" bindinput="onInputChange" />
-      </view>
-      <view class="form-row">
-        <text class="label">退税汇率</text>
-        <input class="input" type="digit" value="{{form.rebateTaxRate}}" data-field="rebateTaxRate" bindfocus="onInputFocus" bindinput="onInputChange" />
-      </view>
-      <view class="form-row">
-        <text class="label">返点点数（2个点填0.02）</text>
-        <input class="input" type="digit" value="{{form.rebatePoints}}" data-field="rebatePoints" bindfocus="onInputFocus" bindinput="onInputChange" />
-      </view>
-      <view class="form-row tax-fee-row">
-        <view class="tax-fee-main">
-          <view class="label-with-help">
-            <text class="label">退税手续费</text>
-            <view class="help-wrap">
-              <text class="help-button" bindtap="toggleTaxFeeHelp">?</text>
-            </view>
-          </view>
-          <view class="tax-fee-controls">
-            <view class="currency-switch">
-              <text class="currency-option {{form.taxFeeCurrency === 'CNY' ? 'active' : ''}}" data-currency="CNY" bindtap="onTaxFeeCurrencyChange">人民币（CNY）</text>
-              <text class="currency-option {{form.taxFeeCurrency === 'JPY' ? 'active' : ''}}" data-currency="JPY" bindtap="onTaxFeeCurrencyChange">日元（JPY）</text>
-            </view>
-            <input class="input" type="digit" value="{{form.taxFee}}" data-field="taxFee" bindfocus="onInputFocus" bindinput="onInputChange" />
-          </view>
-        </view>
-        <view wx:if="{{taxFeeHelpVisible}}" class="help-bubble">
-          <text class="help-title">退税手续费费用说明</text>
-          <text>日本购物退税会产生手续费，(包含1.2.3.4.)，本栏填写总的手续费，最终反回来的钱会少，少的金额，可自行填写。</text>
-          <text>1. Processing Fee（处理费 / 业务办理费）</text>
-          <text>2. Transaction Fee（交易手续费 / 支付通道费）</text>
-          <text>3. Inter Remit Fee（中间行汇款费 / 跨境中转费）</text>
-          <text>4. Consumption Tax (10%)（消费税 10%）</text>
-        </view>
-      </view>
+      <view class="result-badge">{{result.settlementLabel}}</view>
     </view>
 
-    <button class="calculate-button" bindtap="calculate">计算到手成本</button>
-
-    <view wx:if="{{result}}" class="result">
-      <view class="result-row"><text>到手税费</text><text>{{result.tax}} 元</text></view>
-      <view class="result-row"><text>刷卡成本</text><text>{{result.cardCost}} 元</text></view>
-      <view class="result-row"><text>返点</text><text>{{result.rebate}} 元</text></view>
-      <view class="result-row"><text>退税手续费（人民币）</text><text>{{result.taxFee}} 元</text></view>
-      <view class="final-row"><text>最终成本</text><text>{{result.finalCost}} 元</text></view>
+    <view class="result-save-row">
+      <view class="saving">比原价省 {{result.savingsText}} · {{result.effectiveDiscountText}}</view>
+      <view wx:if="{{result.actualBadge}}" class="actual-badge">按实到重算</view>
     </view>
 
-    <view class="formula">
-      <text class="formula-title">公式：</text>
-      <text>到手税费(人民币) = 含税价/1.1 × 折扣 × 0.1 × 0.77 × 退税汇率</text>
-      <text>刷卡成本(人民币) = 含税价 × 折扣 × 刷卡汇率</text>
-      <text>返点(人民币) = 含税价/1.1 × 折扣 × 返点点数 × 刷卡汇率</text>
-      <text>最终成本 = 刷卡成本 - 到手税费 - 返点 + 退税手续费</text>
+    <view class="result-grid">
+      <view class="grid-item"><text class="grid-label">实付</text><text class="grid-value">{{result.paidText}}</text></view>
+      <view class="grid-item"><text class="grid-label">退税到账</text><text class="grid-value">{{result.refundText}}</text></view>
+      <view class="grid-item"><text class="grid-label">返现</text><text class="grid-value">{{result.cashbackText}}</text></view>
+      <view class="grid-item"><text class="grid-label">手续费</text><text class="grid-value">{{result.feeText}}</text></view>
+    </view>
+
+    <view class="breakdown">
+      <view class="breakdown-row"><text>含税原价</text><text>{{result.listCostText}}</text></view>
+      <view class="breakdown-row"><text>消费税</text><text>{{result.taxText}}</text></view>
+      <view class="breakdown-row"><text>税前退税</text><text>{{result.grossRefundText}}</text></view>
+      <view class="breakdown-row"><text>退税净额</text><text>{{result.netRefundText}}</text></view>
+      <view wx:if="{{result.showRoundingLoss}}" class="breakdown-row"><text>取整损耗</text><text>-{{result.roundingLossText}}</text></view>
+      <view class="breakdown-row"><text>汇率</text><text>{{result.rateText}} 元/100日元</text></view>
+      <view class="breakdown-row"><text>门槛</text><text>{{result.thresholdText}}</text></view>
+    </view>
+
+    <view wx:if="{{warnings.length}}" class="warnings">
+      <view wx:for="{{warnings}}" wx:key="*this" class="warning-item">• {{item}}</view>
+    </view>
+    <view wx:if="{{notes.length}}" class="notes">
+      <view wx:for="{{notes}}" wx:key="*this" class="note-item">{{item}}</view>
+    </view>
+
+    <view class="result-actions">
+      <view class="action-btn secondary" bindtap="onCopySummary">复制结果</view>
+      <view class="action-btn primary" bindtap="onSaveOrder">保存这单</view>
     </view>
   </view>
-</scroll-view>
+
+  <view wx:else class="empty-state">
+    <view class="empty-icon">¥</view>
+    <view class="empty-title">输入商品价格开始计算</view>
+    <view class="empty-sub">含税 / 不含税价均可，支持 8% 与 10% 税率</view>
+  </view>
+
+  <!-- 退税与汇率 -->
+  <view class="card card-refund">
+    <view class="card-head" bindtap="toggleRefund">
+      <view class="card-head-main">
+        <view class="card-title-row">
+          <text class="card-title">退税与汇率</text>
+          <text class="chevron">{{refundOpen ? '⌃' : '⌄'}}</text>
+        </view>
+        <view class="card-summary">{{headerSummary}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{refundOpen}}" class="card-body">
+      <view class="section-label">结算方式</view>
+      <view class="two-options">
+        <view
+          class="option-card {{form.settlementMode === 'refund' ? 'active' : ''}}"
+          data-field="settlementMode"
+          data-value="refund"
+          bindtap="onOptionTap"
+        >
+          <view class="option-title">出境退税</view>
+          <view class="option-sub">先付含税价，离境退消费税</view>
+        </view>
+        <view
+          class="option-card {{form.settlementMode === 'taxFree' ? 'active' : ''}}"
+          data-field="settlementMode"
+          data-value="taxFree"
+          bindtap="onOptionTap"
+        >
+          <view class="option-title">不退税一口价</view>
+          <view class="option-sub">按免税价直接付款</view>
+        </view>
+      </view>
+      <view wx:if="{{form.settlementMode === 'taxFree'}}" class="highlight-box highlight-blue mini">
+        <text class="highlight-tag">结算提示</text>
+        <text class="highlight-text">不退税模式不使用退税公司手续费和机场现金，只按免税价 × 刷卡汇率计算。</text>
+      </view>
+
+      <view class="section-head">
+        <text class="section-label">退税公司</text>
+        <text class="section-note">费率跟店走，可手改</text>
+      </view>
+      <view class="chips">
+        <view
+          wx:for="{{companies}}"
+          wx:key="id"
+          class="chip {{form.companyId === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onCompanyTap"
+        >{{item.name}}</view>
+      </view>
+
+      <view class="company-meta">
+        <view class="meta-line">
+          <text class="meta-tag">费率说明</text>
+          <text class="confidence {{confidenceClass}}">{{confidenceLabel}}</text>
+          <text class="meta-text">更新 {{verifiedAt}}</text>
+        </view>
+        <view class="company-desc">{{companyDescription}}</view>
+        <view class="company-source">{{companySourceNote}}</view>
+      </view>
+
+      <view wx:if="{{!isManualCompany}}" class="chips preset-chips">
+        <view
+          wx:for="{{storePresets}}"
+          wx:key="id"
+          class="chip subtle {{form.presetId === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onPresetTap"
+        >{{item.name}}</view>
+      </view>
+      <view wx:if="{{presetNote}}" class="preset-note">{{presetNote}}</view>
+      <view wx:if="{{isManualCompany}}" class="highlight-box highlight-violet mini">
+        <text class="highlight-tag">手动模式</text>
+        <text class="highlight-text">在“高级 / 明细”里切换计费基数、定额和最低收费。</text>
+      </view>
+
+      <block wx:if="{{form.settlementMode === 'refund'}}">
+        <view class="section-head">
+          <text class="section-label">机场现金（可选）</text>
+          <text class="section-note">与平台费叠加</text>
+        </view>
+        <view class="chips">
+          <view
+            wx:for="{{addons}}"
+            wx:key="id"
+            class="chip addon-chip {{form.addonId === item.id ? 'active' : ''}}"
+            data-id="{{item.id}}"
+            bindtap="onAddonTap"
+          >{{item.name}}</view>
+        </view>
+        <view class="highlight-box highlight-coral mini">
+          <text class="highlight-tag">叠加规则</text>
+          <text class="highlight-text">Self 1.1% 未税价；Cash Japan 10% 平台费后金额，按 50 円单位调整。</text>
+        </view>
+      </block>
+
+      <view class="fee-row">
+        <view class="fee-main">
+          <view class="section-label">手续费</view>
+          <view wx:if="{{!form.feeIsFixed}}" class="fee-input-row">
+            <input
+              class="fee-input"
+              type="digit"
+              value="{{form.feePct}}"
+              bindinput="onFeePctInput"
+            />
+            <text class="fee-unit">%</text>
+          </view>
+          <view wx:else class="fee-input-row">
+            <input
+              class="fee-input"
+              type="number"
+              value="{{form.feeFixedJPY}}"
+              data-field="feeFixedJPY"
+              bindinput="onFeeAdvancedInput"
+            />
+            <text class="fee-unit">円/笔</text>
+          </view>
+          <view class="fee-basis-pill {{feeBasisClass}}">{{feeBasisLabel}}</view>
+          <view wx:if="{{feeExtraText}}" class="fee-extra-pill">{{feeExtraText}}</view>
+        </view>
+
+        <view class="qty-box">
+          <view class="section-label">数量</view>
+          <view class="stepper">
+            <view class="stepper-btn" bindtap="onQuantityMinus">−</view>
+            <text class="stepper-value">{{form.quantity}}</text>
+            <view class="stepper-btn" bindtap="onQuantityPlus">+</view>
+          </view>
+          <view class="fee-basis">固定费/最低费按整单</view>
+        </view>
+      </view>
+
+      <view class="fee-tools">
+        <view class="text-link" bindtap="toggleFeeAdvanced">{{feeAdvancedOpen ? '收起高级' : '高级 / 明细'}}</view>
+        <view wx:if="{{canResetFee}}" class="text-link" bindtap="onFeeReset">恢复默认</view>
+      </view>
+
+      <view wx:if="{{feeAdvancedOpen}}" class="advanced-box">
+        <view wx:if="{{!form.feeIsFixed}}" class="advanced-row">
+          <text class="advanced-label">计费基数</text>
+          <view class="mini-chips">
+            <view class="mini-chip {{form.feeBasis === 'preTax' ? 'active' : ''}}" data-value="preTax" bindtap="onFeeBasisTap">未税价</view>
+            <view class="mini-chip {{form.feeBasis === 'grossRefund' ? 'active' : ''}}" data-value="grossRefund" bindtap="onFeeBasisTap">退税额</view>
+            <view class="mini-chip {{form.feeBasis === 'taxIncluded' ? 'active' : ''}}" data-value="taxIncluded" bindtap="onFeeBasisTap">含税价</view>
+          </view>
+        </view>
+        <view class="advanced-row">
+          <text class="advanced-label">定额收费</text>
+          <switch checked="{{form.feeIsFixed}}" color="#d99a2b" bindchange="onFeeFixedChange" />
+        </view>
+        <view wx:if="{{!form.feeIsFixed}}" class="advanced-row">
+          <text class="advanced-label">最低收费（円）</text>
+          <input
+            class="mini-input"
+            type="number"
+            value="{{form.feeMinJPY}}"
+            data-field="feeMinJPY"
+            bindinput="onFeeAdvancedInput"
+          />
+        </view>
+        <view wx:if="{{hasOptionalFee}}" class="advanced-row">
+          <text class="advanced-label">计入可选费用</text>
+          <switch checked="{{form.includeOptionalFees}}" color="#d99a2b" bindchange="onOptionalFeeChange" />
+        </view>
+        <view class="advanced-tip">可选费用例如 PIE VAT 提现费 0.28–0.32%。</view>
+      </view>
+
+      <view wx:if="{{feeLines.length}}" class="fee-lines">
+        <view wx:for="{{feeLines}}" wx:key="key" class="fee-line">
+          <view class="fee-line-main">
+            <text class="fee-line-label">{{item.label}}</text>
+            <text class="fee-line-basis">{{item.basisText}}</text>
+          </view>
+          <text class="fee-line-amount">−{{item.amountText}}</text>
+        </view>
+      </view>
+
+      <view class="rate-block">
+        <view class="section-head">
+          <view>
+            <view class="section-label">汇率 · 100 日元</view>
+            <view class="rate-big">{{rateDisplay}} <text class="rate-unit">元</text></view>
+            <view class="rate-sub">{{rateSourceLabel}} · {{rateUpdatedText}}</view>
+          </view>
+          <view class="sync-btn" bindtap="onSyncRate">同步市场价</view>
+        </view>
+
+        <view class="chips">
+          <view class="chip subtle" bindtap="applyMarketRate">按市场价 {{marketRateDisplay}}</view>
+          <view class="chip subtle" bindtap="applyAlipayRate">支付宝口径 ≈{{alipayRateDisplay}}</view>
+        </view>
+
+        <view class="manual-rate-row">
+          <text class="manual-label">手填</text>
+          <input
+            class="manual-rate-input"
+            type="digit"
+            value="{{form.ratePer100}}"
+            placeholder="如 4.1902"
+            bindinput="onRateInput"
+          />
+          <text class="manual-unit">元/100日元</text>
+        </view>
+        <view class="manual-rate-row">
+          <text class="manual-label">刷卡汇率</text>
+          <input
+            class="manual-rate-input"
+            type="digit"
+            value="{{form.cardRatePer100}}"
+            placeholder="如 4.1902"
+            bindinput="onCardRateInput"
+          />
+          <text class="manual-unit">元/100日元</text>
+        </view>
+        <view class="rate-foot">当前按 {{rateDisplay}} 元折算 · 实际以银行/退税单为准</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 到账核对 -->
+  <view class="card card-reconcile">
+    <view class="card-head" bindtap="toggleReconcile">
+      <view class="card-head-main">
+        <view class="card-title-row">
+          <text class="card-title">到账核对</text>
+          <text class="chevron">{{reconcileOpen ? '⌃' : '⌄'}}</text>
+        </view>
+        <view class="card-sub">填小票数字，拆出被吃的汇率差</view>
+      </view>
+    </view>
+
+    <view wx:if="{{reconcileOpen}}" class="card-body">
+      <view class="field-row">
+        <view class="field-info">
+          <text class="field-label">退税日元</text>
+          <text class="field-hint">终端/小票上的退税额</text>
+        </view>
+        <view class="field-input-wrap">
+          <input class="field-input" type="digit" value="{{form.actualRefundJPY}}" data-field="actualRefundJPY" bindinput="onFieldInput" placeholder="如 2129" />
+          <text class="field-unit">円</text>
+        </view>
+      </view>
+      <view class="field-row">
+        <view class="field-info">
+          <text class="field-label">实到人民币</text>
+          <text class="field-hint">微信/支付宝到账金额</text>
+        </view>
+        <view class="field-input-wrap">
+          <input class="field-input" type="digit" value="{{form.actualReceivedCNY}}" data-field="actualReceivedCNY" bindinput="onFieldInput" placeholder="如 82.66" />
+          <text class="field-unit">元</text>
+        </view>
+      </view>
+      <view class="field-row">
+        <view class="field-info">
+          <text class="field-label">小票汇率</text>
+          <text class="field-hint">选填，填了拆得准</text>
+        </view>
+        <view class="field-input-wrap">
+          <input class="field-input" type="digit" value="{{form.receiptRate}}" data-field="receiptRate" bindinput="onFieldInput" placeholder="如 3.8826" />
+          <text class="field-unit">元/100日元</text>
+        </view>
+      </view>
+      <view class="field-row">
+        <view class="field-info">
+          <text class="field-label">换汇手续费参考</text>
+          <text class="field-hint">Global Blue 约 4%，只作参考</text>
+        </view>
+        <view class="field-input-wrap">
+          <input class="field-input" type="digit" value="{{form.fxLossPct}}" data-field="fxLossPct" bindinput="onFieldInput" placeholder="如 4" />
+          <text class="field-unit">%</text>
+        </view>
+      </view>
+
+      <view class="switch-row">
+        <view>
+          <view class="field-label">用实到金额重算到手价</view>
+          <view class="field-hint">开启后，结果会按实际到账人民币计算</view>
+        </view>
+        <switch checked="{{form.useActual}}" color="#d99a2b" bindchange="onUseActualChange" />
+      </view>
+
+      <view wx:if="{{reconcileView}}" class="reconcile-result">
+        <view class="reconcile-status {{reconcileView.statusClass}}">{{reconcileView.statusText}}</view>
+        <view class="result-grid">
+          <view class="grid-item"><text class="grid-label">按市场价应到</text><text class="grid-value">{{reconcileView.marketExpectedText}}</text></view>
+          <view class="grid-item"><text class="grid-label">反推小票汇率</text><text class="grid-value">{{reconcileView.impliedRateText}}</text></view>
+          <view class="grid-item"><text class="grid-label">被吃金额</text><text class="grid-value">{{reconcileView.hiddenLossText}}</text></view>
+          <view class="grid-item"><text class="grid-label">被吃比例</text><text class="grid-value">{{reconcileView.hiddenPctText}}</text></view>
+          <view class="grid-item"><text class="grid-label">小票汇率差额</text><text class="grid-value">{{reconcileView.receiptDiffText}}</text></view>
+          <view class="grid-item"><text class="grid-label">按参考汇损应到</text><text class="grid-value">{{reconcileView.referenceText}}</text></view>
+        </view>
+        <view class="reconcile-tip">“换汇手续费”只是参考；实际损耗以实到金额反推为准。Global Blue 约 4% 不代表全部损耗。</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 返现 / 其他费用 -->
+  <view class="card card-cashback">
+    <view class="row-between">
+      <view>
+        <view class="card-title">携程返现</view>
+        <view class="card-sub">按实付金额返，实际以平台规则为准</view>
+      </view>
+      <view class="cashback-badge">
+        <block wx:if="{{form.cashbackPct === 0}}">无返现</block>
+        <block wx:else>{{form.cashbackPct}}%</block>
+      </view>
+    </view>
+    <view class="chips">
+      <view
+        wx:for="{{cashbackOptions}}"
+        wx:key="value"
+        class="chip {{form.cashbackPct === item.value ? 'active' : ''}}"
+        data-field="cashbackPct"
+        data-value="{{item.value}}"
+        bindtap="onNumberChipTap"
+      >{{item.label}}</view>
+      <view class="chip-input-wrap">
+        <input class="chip-input" type="digit" value="{{form.cashbackPct}}" bindinput="onCashbackInput" />
+        <text class="chip-input-unit">%</text>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+    <view class="field-row compact">
+      <view class="field-info">
+        <text class="field-label">其他固定手续费</text>
+        <text class="field-hint">人民币；没有就填 0</text>
+      </view>
+      <view class="field-input-wrap">
+        <input class="field-input" type="digit" value="{{form.extraFeeCNY}}" bindinput="onExtraFeeInput" placeholder="0" />
+        <text class="field-unit">元</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="disclaimer">
+    <view class="disclaimer-title">参数说明</view>
+    <view class="disclaimer-text">费率为参考值，按店差异很大；标注“估算”的不是官方公布值。实际以门店/退税单为准。</view>
+    <view class="disclaimer-text">2026.11.1 起「先付后退」：同店同日未税满 5,000 円，离境海关确认后退税。</view>
+    <view class="disclaimer-text">参数版本 {{dataVersion}}</view>
+  </view>
+
+  <view class="page-bottom-space"></view>
+
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <text class="nav-icon">▦</text>
+      <text>计算器</text>
+    </view>
+    <view class="nav-item" bindtap="openHistory">
+      <text class="nav-icon">☰</text>
+      <text>算过的单</text>
+    </view>
+    <view class="nav-item" bindtap="openSettings">
+      <text class="nav-icon">⚙</text>
+      <text>设置</text>
+    </view>
+  </view>
+</view>

@@ -1,12 +1,14 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/history/history",
+    "pages/settings/settings"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "日本购物百货成本计算器",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarTitleText": "到手价计算器",
+    "navigationBarBackgroundColor": "#fff8ec",
+    "backgroundColor": "#fff8ec"
   },
   "style": "v2",
   "componentFramework": "glass-easel",

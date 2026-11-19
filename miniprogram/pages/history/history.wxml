@@ -1,0 +1,63 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-kicker">SAVED ORDERS</view>
+    <view class="hero-title">算过的单</view>
+    <view class="hero-sub">共 {{orders.length}} 单 · 参数版本 {{dataVersion}}</view>
+  </view>
+
+  <view wx:if="{{orders.length}}">
+    <view
+      wx:for="{{orders}}"
+      wx:key="id"
+      class="order-card"
+      data-id="{{item.id}}"
+      bindtap="onRestore"
+    >
+      <view class="order-top">
+        <view class="order-head-main">
+          <view class="order-title">{{item.title}}</view>
+          <view class="order-time">{{item.timeText}}</view>
+        </view>
+        <view class="order-price">{{item.result.netCostText}}</view>
+      </view>
+
+      <view class="order-sub">{{item.subtitle}}</view>
+
+      <view class="order-grid">
+        <view class="grid-item">
+          <text class="grid-label">实付</text>
+          <text class="grid-value">{{item.result.paidText}}</text>
+        </view>
+        <view class="grid-item">
+          <text class="grid-label">退税</text>
+          <text class="grid-value">{{item.result.refundText}}</text>
+        </view>
+        <view class="grid-item">
+          <text class="grid-label">返现</text>
+          <text class="grid-value">{{item.result.cashbackText}}</text>
+        </view>
+        <view class="grid-item">
+          <text class="grid-label">手续费</text>
+          <text class="grid-value">{{item.result.feeText}}</text>
+        </view>
+      </view>
+
+      <view class="order-foot">
+        <text class="order-meta">{{item.result.settlementLabel}} · 汇率 {{item.result.rateText}}</text>
+        <text class="delete-link" data-id="{{item.id}}" catchtap="onDelete">删除</text>
+      </view>
+    </view>
+
+    <view class="clear-btn" bindtap="onClear">清空全部</view>
+    <view class="back-btn" bindtap="goCalculator">回到计算器</view>
+  </view>
+
+  <view wx:else class="empty-state">
+    <view class="empty-icon">☰</view>
+    <view class="empty-title">还没有算过的单</view>
+    <view class="empty-sub">在计算器里点“保存这单”，之后可以在这里恢复。</view>
+    <view class="empty-btn" bindtap="goCalculator">去计算</view>
+  </view>
+
+  <view class="tip">恢复历史单会按当前参数重新计算；列表里的金额是保存当时的快照。</view>
+</view>

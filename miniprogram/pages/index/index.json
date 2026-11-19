@@ -1,4 +1,7 @@
 {
-  "usingComponents": {
-  }
+  "navigationBarTitleText": "到手价计算器",
+  "navigationBarBackgroundColor": "#fff8ec",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#fff8ec",
+  "usingComponents": {}
 }
