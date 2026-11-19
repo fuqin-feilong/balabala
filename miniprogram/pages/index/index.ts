@@ -4,6 +4,8 @@ const announcementText = '公告：汇率会实时变化，请根据当前实际
 Component({
   data: {
     announcement: announcementText,
+    taxFeeHelpVisible: false,
+    clearedFields: {} as Record<string, boolean>,
     form: {
       taxIncludedPrice: '401500',
       discount: '1',
@@ -11,6 +13,7 @@ Component({
       rebateTaxRate: '0.038',
       rebatePoints: '0.02',
       taxFee: '0',
+      taxFeeCurrency: 'JPY' as 'CNY' | 'JPY',
     },
     result: null as {
       tax: string
@@ -21,6 +24,18 @@ Component({
     } | null,
   },
   methods: {
+    onInputFocus(e: WechatMiniprogram.Input) {
+      const field = e.currentTarget.dataset.field as string
+      if (this.data.clearedFields[field]) {
+        return
+      }
+
+      this.setData({
+        [`form.${field}`]: '',
+        [`clearedFields.${field}`]: true,
+      })
+    },
+
     onInputChange(e: WechatMiniprogram.Input) {
       const field = e.currentTarget.dataset.field as keyof typeof this.data.form
       this.setData({
@@ -28,11 +43,16 @@ Component({
       })
     },
 
-    showTaxFeeHelp() {
-      wx.showModal({
-        title: '退税手续费费用说明',
-        content: '日本购物退税会产生手续费，(包含1.2.3.4.)，最终反回来的钱会少，少的金额，可自行填写。\n1. Processing Fee（处理费 / 业务办理费）\n2. Transaction Fee（交易手续费 / 支付通道费）\n3. Inter Remit Fee（中间行汇款费 / 跨境中转费）\n4. Consumption Tax (10%)（消费税 10%）',
-        showCancel: false,
+    toggleTaxFeeHelp() {
+      this.setData({
+        taxFeeHelpVisible: !this.data.taxFeeHelpVisible,
+      })
+    },
+
+    onTaxFeeCurrencyChange(e: WechatMiniprogram.TouchEvent) {
+      const currency = e.currentTarget.dataset.currency as 'CNY' | 'JPY'
+      this.setData({
+        'form.taxFeeCurrency': currency,
       })
     },
 
@@ -44,6 +64,7 @@ Component({
         rebateTaxRate,
         rebatePoints,
         taxFee,
+        taxFeeCurrency,
       } = this.data.form
       const values = [
         taxIncludedPrice,
@@ -66,14 +87,15 @@ Component({
       const tax = price / 1.1 * discountValue * 0.1 * 0.77 * taxRateValue
       const cardCost = price * discountValue * cardRateValue
       const rebate = price / 1.1 * discountValue * pointsValue * cardRateValue
-      const finalCost = cardCost - tax - rebate + taxFeeValue
+      const taxFeeInRmb = taxFeeCurrency === 'JPY' ? taxFeeValue * taxRateValue : taxFeeValue
+      const finalCost = cardCost - tax - rebate + taxFeeInRmb
 
       this.setData({
         result: {
           tax: tax.toFixed(2),
           cardCost: cardCost.toFixed(2),
           rebate: rebate.toFixed(2),
-          taxFee: taxFeeValue.toFixed(2),
+          taxFee: taxFeeInRmb.toFixed(2),
           finalCost: finalCost.toFixed(2),
         },
       })

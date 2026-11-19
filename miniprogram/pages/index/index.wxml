@@ -14,31 +14,52 @@
 
     <view class="form">
       <view class="form-row">
-        <text class="label">含税原价（日元）</text>
-        <input class="input" type="digit" value="{{form.taxIncludedPrice}}" data-field="taxIncludedPrice" bindinput="onInputChange" />
+        <text class="label">含税原价</text>
+        <view class="input-with-unit">
+          <input class="input" type="digit" value="{{form.taxIncludedPrice}}" data-field="taxIncludedPrice" bindfocus="onInputFocus" bindinput="onInputChange" />
+          <text class="input-unit">JPY</text>
+        </view>
       </view>
       <view class="form-row">
         <text class="label">折扣（无折扣填1）</text>
-        <input class="input" type="digit" value="{{form.discount}}" data-field="discount" bindinput="onInputChange" />
+        <input class="input" type="digit" value="{{form.discount}}" data-field="discount" bindfocus="onInputFocus" bindinput="onInputChange" />
       </view>
       <view class="form-row">
         <text class="label">刷卡汇率</text>
-        <input class="input" type="digit" value="{{form.cardRate}}" data-field="cardRate" bindinput="onInputChange" />
+        <input class="input" type="digit" value="{{form.cardRate}}" data-field="cardRate" bindfocus="onInputFocus" bindinput="onInputChange" />
       </view>
       <view class="form-row">
         <text class="label">退税汇率</text>
-        <input class="input" type="digit" value="{{form.rebateTaxRate}}" data-field="rebateTaxRate" bindinput="onInputChange" />
+        <input class="input" type="digit" value="{{form.rebateTaxRate}}" data-field="rebateTaxRate" bindfocus="onInputFocus" bindinput="onInputChange" />
       </view>
       <view class="form-row">
         <text class="label">返点点数（2个点填0.02）</text>
-        <input class="input" type="digit" value="{{form.rebatePoints}}" data-field="rebatePoints" bindinput="onInputChange" />
+        <input class="input" type="digit" value="{{form.rebatePoints}}" data-field="rebatePoints" bindfocus="onInputFocus" bindinput="onInputChange" />
       </view>
-      <view class="form-row">
-        <view class="label-with-help">
-          <text class="label">退税手续费（人民币）</text>
-          <text class="help-button" bindtap="showTaxFeeHelp">?</text>
+      <view class="form-row tax-fee-row">
+        <view class="tax-fee-main">
+          <view class="label-with-help">
+            <text class="label">退税手续费</text>
+            <view class="help-wrap">
+              <text class="help-button" bindtap="toggleTaxFeeHelp">?</text>
+            </view>
+          </view>
+          <view class="tax-fee-controls">
+            <view class="currency-switch">
+              <text class="currency-option {{form.taxFeeCurrency === 'CNY' ? 'active' : ''}}" data-currency="CNY" bindtap="onTaxFeeCurrencyChange">人民币（CNY）</text>
+              <text class="currency-option {{form.taxFeeCurrency === 'JPY' ? 'active' : ''}}" data-currency="JPY" bindtap="onTaxFeeCurrencyChange">日元（JPY）</text>
+            </view>
+            <input class="input" type="digit" value="{{form.taxFee}}" data-field="taxFee" bindfocus="onInputFocus" bindinput="onInputChange" />
+          </view>
         </view>
-        <input class="input" type="digit" value="{{form.taxFee}}" data-field="taxFee" bindinput="onInputChange" />
+        <view wx:if="{{taxFeeHelpVisible}}" class="help-bubble">
+          <text class="help-title">退税手续费费用说明</text>
+          <text>日本购物退税会产生手续费，(包含1.2.3.4.)，本栏填写总的手续费，最终反回来的钱会少，少的金额，可自行填写。</text>
+          <text>1. Processing Fee（处理费 / 业务办理费）</text>
+          <text>2. Transaction Fee（交易手续费 / 支付通道费）</text>
+          <text>3. Inter Remit Fee（中间行汇款费 / 跨境中转费）</text>
+          <text>4. Consumption Tax (10%)（消费税 10%）</text>
+        </view>
       </view>
     </view>
 
@@ -48,7 +69,7 @@
       <view class="result-row"><text>到手税费</text><text>{{result.tax}} 元</text></view>
       <view class="result-row"><text>刷卡成本</text><text>{{result.cardCost}} 元</text></view>
       <view class="result-row"><text>返点</text><text>{{result.rebate}} 元</text></view>
-      <view class="result-row"><text>退税手续费</text><text>{{result.taxFee}} 元</text></view>
+      <view class="result-row"><text>退税手续费（人民币）</text><text>{{result.taxFee}} 元</text></view>
       <view class="final-row"><text>最终成本</text><text>{{result.finalCost}} 元</text></view>
     </view>
 
